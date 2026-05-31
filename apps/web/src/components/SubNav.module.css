@@ -1,0 +1,39 @@
+.subnav {
+  position: sticky;
+  top: 85px;
+  z-index: 30;
+  background: rgba(253, 251, 246, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid #ece3d2;
+}
+
+.bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-block: 12px;
+}
+
+.bar a {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #e4dccc;
+  transition: background 0.15s, color 0.15s;
+}
+
+.bar a:hover {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.bar a.active {
+  background: var(--brick);
+  color: #fff;
+  border-color: var(--brick);
+}
