@@ -1,0 +1,45 @@
+.callout {
+  background: var(--teal-deep);
+  color: #fff;
+  border-radius: 20px;
+  padding: 48px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.text {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 17px;
+  max-width: 560px;
+}
+
+.callout :global(.btn-primary) {
+  background: #fff;
+  color: var(--brick);
+  white-space: nowrap;
+}
+
+.callout :global(.btn-primary:hover) {
+  background: #fff5ef;
+}
+
+@media (max-width: 980px) {
+  .callout {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .callout :global(.btn-primary) {
+    justify-self: center;
+  }
+  .text { max-width: none; }
+}
