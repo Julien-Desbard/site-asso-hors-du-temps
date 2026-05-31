@@ -22,8 +22,8 @@
 | 4 | Intégration Actualités (liste + détail + home) | `feat/web-actualites` | ✅ Terminé |
 | 5 | Intégration Équipe + Étapes accueil | `feat/web-equipe-accueil` | ✅ Terminé |
 | 6 | Formulaire contact + email Resend | `feat/contact-form` | ✅ Terminé |
-| 7 | Webhook ISR + SEO + RGPD + a11y | `feat/seo-revalidation-rgpd` | 🔍 PR ouverte — en attente GO merge |
-| 8 | Déploiement (Vercel + Render + Neon + Cloudinary) | `feat/deploy` | ⏳ À faire |
+| 7 | Webhook ISR + SEO + RGPD + a11y | `feat/seo-revalidation-rgpd` | ✅ Terminé |
+| 8 | Déploiement (Vercel + Render + Neon + Cloudinary) | `feat/deploy` | 🔍 PR ouverte — en attente déploiement réel |
 
 ---
 
@@ -73,3 +73,61 @@
 pnpm --filter @hors-du-temps/web dev
 # http://localhost:3000 → header + footer, nav active, responsive mobile OK
 ```
+
+---
+
+## Chunk 8 — Déploiement 🔍
+
+**Branche :** `feat/deploy`
+
+### Checklist déploiement
+
+#### 1. Neon (Postgres prod)
+1. Créer un projet sur [neon.tech](https://neon.tech)
+2. Copier la `DATABASE_URL` (format `postgresql://...`)
+3. Ajouter dans les env vars Render :
+   ```
+   DATABASE_CLIENT=postgres
+   DATABASE_URL=postgresql://...
+   DATABASE_SSL=true
+   ```
+
+#### 2. Cloudinary
+1. Créer un compte [cloudinary.com](https://cloudinary.com)
+2. Ajouter dans les env vars Render :
+   ```
+   CLOUDINARY_NAME=xxx
+   CLOUDINARY_KEY=xxx
+   CLOUDINARY_SECRET=xxx
+   ```
+
+#### 3. Render (Strapi CMS)
+1. New Web Service → repo `site-asso-hors-du-temps`, dossier `apps/cms`
+2. Build command : `pnpm install --frozen-lockfile && pnpm build`
+3. Start command : `pnpm start`
+4. Env vars : toutes celles de `apps/cms/.env.example` (Neon + Cloudinary + secrets)
+5. URL Render → noter pour l'étape Vercel
+
+#### 4. Resend
+1. Créer un compte [resend.com](https://resend.com), vérifier le domaine `assohorsdutemps.fr`
+2. Créer une clé API → `RESEND_API_KEY`
+
+#### 5. Vercel (Next.js)
+1. Import repo → framework Next.js, root dir `apps/web`
+2. Env vars (onglet Settings → Environment Variables) :
+   ```
+   NEXT_PUBLIC_STRAPI_URL=https://xxx.onrender.com
+   NEXT_PUBLIC_STRAPI_TOKEN=<token API Strapi read-only>
+   NEXT_PUBLIC_SITE_URL=https://assohorsdutemps.fr
+   REVALIDATION_SECRET=<secret aléatoire>
+   RESEND_API_KEY=<clé Resend>
+   RESEND_FROM=contact@assohorsdutemps.fr
+   CONTACT_EMAIL=asso.horsdutemps@gmail.com
+   ```
+3. Deploy → vérifier les pages et le formulaire
+
+#### 6. Webhook ISR Strapi → Vercel
+Dans l'admin Strapi → Settings → Webhooks → Ajouter :
+- URL : `https://assohorsdutemps.fr/api/revalidate?secret=<REVALIDATION_SECRET>`
+- Trigger : `entry.publish`, `entry.unpublish`, `entry.update`
+- Body : `{ "model": "{{model}}" }`
