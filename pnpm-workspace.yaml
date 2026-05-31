@@ -1,0 +1,12 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Autorise les scripts de build pour les dépendances natives
+onlyBuiltDependencies:
+  - '@swc/core'
+  - 'better-sqlite3'
+  - 'core-js-pure'
+  - 'esbuild'
+  - 'sharp'
+  - 'unrs-resolver'
