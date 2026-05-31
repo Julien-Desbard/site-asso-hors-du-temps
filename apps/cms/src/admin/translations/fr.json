@@ -32,9 +32,27 @@
     "User": "Utilisateur",
     "search.placeholder": "Rechercher",
     "content-manager.containers.list.table-headers.status": "Statut",
-    "content-manager.content-types.api::equipe.equipe.id": "ID",
-    "content-manager.content-types.api::equipe.equipe.titre": "Titre",
-    "content-manager.content-types.api::equipe.equipe.sous_titre": "Sous-titre",
-    "content-manager.content-types.api::equipe.equipe.photo": "Photo",
-    "equipe": "Équipe"
+    "article": "Article",
+    "content-manager.content-types.api::article.article.titre": "Titre",
+    "content-manager.content-types.api::article.article.slug": "Slug (URL)",
+    "content-manager.content-types.api::article.article.date": "Date de publication",
+    "content-manager.content-types.api::article.article.extrait": "Extrait (carte)",
+    "content-manager.content-types.api::article.article.contenu": "Contenu",
+    "content-manager.content-types.api::article.article.image_principale": "Image principale",
+    "content-manager.content-types.api::article.article.galerie": "Galerie photos",
+    "content-manager.content-types.api::article.article.lien_externe": "Lien externe (optionnel)",
+    "content-manager.content-types.api::article.article.a_la_une": "À la une",
+
+    "membre-equipe": "Membre de l'équipe",
+    "content-manager.content-types.api::membre-equipe.membre-equipe.prenom": "Prénom",
+    "content-manager.content-types.api::membre-equipe.membre-equipe.role": "Rôle",
+    "content-manager.content-types.api::membre-equipe.membre-equipe.presentation": "Présentation",
+    "content-manager.content-types.api::membre-equipe.membre-equipe.photo": "Photo",
+    "content-manager.content-types.api::membre-equipe.membre-equipe.ordre": "Ordre d'affichage",
+
+    "etape-accueil": "Étape d'accueil",
+    "content-manager.content-types.api::etape-accueil.etape-accueil.titre": "Titre",
+    "content-manager.content-types.api::etape-accueil.etape-accueil.tag": "Tag (ex: on vous écoute)",
+    "content-manager.content-types.api::etape-accueil.etape-accueil.description": "Description",
+    "content-manager.content-types.api::etape-accueil.etape-accueil.ordre": "Ordre (1, 2, 3…)"
 }

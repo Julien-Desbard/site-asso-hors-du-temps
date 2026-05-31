@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "membre_equipes",
+  "info": {
+    "singularName": "membre-equipe",
+    "pluralName": "membre-equipes",
+    "displayName": "Membre de l'équipe",
+    "description": "Bénévoles et accueillants présentés sur la page Qui sommes-nous"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "prenom": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    },
+    "presentation": {
+      "type": "text",
+      "required": true
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    }
+  }
+}
