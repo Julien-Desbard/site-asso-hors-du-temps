@@ -304,6 +304,22 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   box-shadow: 0 24px 50px -20px rgba(0,0,0,0.3);
 }
 
+/* -------- skip link a11y -------- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 9999;
+  transition: top 0.1s;
+}
+.skip-link:focus { top: 0; }
+
 /* -------- home hero -------- */
 .home-hero { background: var(--cream); position: relative; overflow: hidden; }
 .home-hero::before {

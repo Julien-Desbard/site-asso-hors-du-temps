@@ -17,12 +17,12 @@
 |---|-----|---------|--------|
 | 0 | Bootstrap monorepo + CI | `chore/bootstrap-monorepo` | ✅ Terminé |
 | 1 | Strapi content-types FR | `feat/cms-content-types` | ✅ Terminé |
-| 2 | Shell Next (layout, CSS, header/footer) | `feat/web-shell` | 🔍 PR ouverte — en attente GO merge |
-| 3 | Pages statiques + composants cards | `feat/web-static-pages` | ⏳ À faire |
-| 4 | Intégration Actualités (liste + détail + home) | `feat/web-actualites` | ⏳ À faire |
-| 5 | Intégration Équipe + Étapes accueil | `feat/web-equipe-accueil` | ⏳ À faire |
-| 6 | Formulaire contact + email Resend | `feat/contact-form` | ⏳ À faire |
-| 7 | Webhook ISR + SEO + RGPD + a11y | `feat/seo-revalidation-rgpd` | ⏳ À faire |
+| 2 | Shell Next (layout, CSS, header/footer) | `feat/web-shell` | ✅ Terminé |
+| 3 | Pages statiques + composants cards | `feat/web-static-pages` | ✅ Terminé |
+| 4 | Intégration Actualités (liste + détail + home) | `feat/web-actualites` | ✅ Terminé |
+| 5 | Intégration Équipe + Étapes accueil | `feat/web-equipe-accueil` | ✅ Terminé |
+| 6 | Formulaire contact + email Resend | `feat/contact-form` | ✅ Terminé |
+| 7 | Webhook ISR + SEO + RGPD + a11y | `feat/seo-revalidation-rgpd` | 🔍 PR ouverte — en attente GO merge |
 | 8 | Déploiement (Vercel + Render + Neon + Cloudinary) | `feat/deploy` | ⏳ À faire |
 
 ---
