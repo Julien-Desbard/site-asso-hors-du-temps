@@ -16,7 +16,7 @@
 | # | Nom | Branche | Statut |
 |---|-----|---------|--------|
 | 0 | Bootstrap monorepo + CI | `chore/bootstrap-monorepo` | ✅ Terminé |
-| 1 | Strapi content-types FR | `feat/cms-content-types` | ⏳ À faire |
+| 1 | Strapi content-types FR | `feat/cms-content-types` | 🔍 PR ouverte — en attente GO merge |
 | 2 | Shell Next (layout, CSS, header/footer) | `feat/web-shell` | ⏳ À faire |
 | 3 | Pages statiques + composants cards | `feat/web-static-pages` | ⏳ À faire |
 | 4 | Intégration Actualités (liste + détail + home) | `feat/web-actualites` | ⏳ À faire |
@@ -27,37 +27,37 @@
 
 ---
 
-## Chunk 0 — Bootstrap monorepo + CI
-**Branche :** `chore/bootstrap-monorepo`
-**Critère :** `pnpm -r typecheck/build` verts, CI configurée
+## Chunk 0 — Bootstrap monorepo + CI ✅
 
-### Fait
-- [x] `git init`, branche `main`
-- [x] `pnpm-workspace.yaml` + `package.json` racine
-- [x] `.gitignore` racine
-- [x] `apps/cms/` — Strapi 5 TS, admin FR, pattern bdc-strapi-api
-- [x] `apps/web/` — Next.js 15, TS strict, vitest, playwright
-- [x] `packages/types/` — types Strapi partagés
-- [x] `packages/config/` — placeholder
-- [x] `.github/workflows/ci.yml`
-- [x] `progress.md`
+**Branche :** `chore/bootstrap-monorepo` → mergé `main` (commit `c933978`)
 
-### En attente
-- [ ] `pnpm install` + vérif typecheck/build local
-- [ ] Premier commit
-- [ ] Merge `main` (sur GO)
+- `git init`, branche `main`, repo GitHub `Julien-Desbard/site-asso-hors-du-temps`
+- `pnpm-workspace.yaml`, `package.json` racine, `.gitignore`, `.npmrc`
+- `apps/cms/` — Strapi 5 TS, admin FR
+- `apps/web/` — Next.js 15, TS strict, vitest, playwright
+- `packages/types/` — types Strapi partagés
+- `.github/workflows/ci.yml` — lint · typecheck · test · build
 
 ---
 
-## Chunk 1 — Strapi content-types FR
-**Branche :** `feat/cms-content-types`
+## Chunk 1 — Strapi content-types FR 🔍
 
-### Contenu-types à créer
-- `Article` : titre, slug, date, extrait, contenu (blocks), image_principale, galerie, lien_externe, a_la_une
-- `MembreEquipe` : prenom, role, presentation, photo, ordre
-- `EtapeAccueil` : titre, tag, description, ordre
+**Branche :** `feat/cms-content-types` (commit `c93c8f7`)
 
-### Critère
-- Admin FR accessible
-- API REST `/api/articles`, `/api/membre-equipes`, `/api/etape-accueils` renvoient JSON
-- Seed de données de démo OK
+**PR :** [feat/cms-content-types → main](https://github.com/Julien-Desbard/site-asso-hors-du-temps/pull/new/feat/cms-content-types)
+
+### Fait
+
+- [x] `Article` : titre, slug (uid), date, extrait, contenu (blocks), image_principale, galerie, lien_externe, a_la_une
+- [x] `MembreEquipe` : prenom, role, presentation, photo, ordre
+- [x] `EtapeAccueil` : titre, tag, description, ordre
+- [x] Traductions FR admin (`fr.json`) — labels champs + noms collections
+- [x] Seed bootstrap : 3 articles, 3 membres, 5 étapes
+
+### Critère de vérif (à valider en local)
+
+```bash
+cd apps/cms && cp .env.example .env  # remplir les secrets
+pnpm dev  # admin FR sur http://localhost:1337/admin
+# /api/articles /api/membre-equipes /api/etape-accueils → JSON
+```
