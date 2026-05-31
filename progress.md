@@ -16,8 +16,8 @@
 | # | Nom | Branche | Statut |
 |---|-----|---------|--------|
 | 0 | Bootstrap monorepo + CI | `chore/bootstrap-monorepo` | ✅ Terminé |
-| 1 | Strapi content-types FR | `feat/cms-content-types` | 🔍 PR ouverte — en attente GO merge |
-| 2 | Shell Next (layout, CSS, header/footer) | `feat/web-shell` | ⏳ À faire |
+| 1 | Strapi content-types FR | `feat/cms-content-types` | ✅ Terminé |
+| 2 | Shell Next (layout, CSS, header/footer) | `feat/web-shell` | 🔍 PR ouverte — en attente GO merge |
 | 3 | Pages statiques + composants cards | `feat/web-static-pages` | ⏳ À faire |
 | 4 | Intégration Actualités (liste + détail + home) | `feat/web-actualites` | ⏳ À faire |
 | 5 | Intégration Équipe + Étapes accueil | `feat/web-equipe-accueil` | ⏳ À faire |
@@ -40,13 +40,9 @@
 
 ---
 
-## Chunk 1 — Strapi content-types FR 🔍
+## Chunk 1 — Strapi content-types FR ✅
 
-**Branche :** `feat/cms-content-types` (commit `c93c8f7`)
-
-**PR :** [feat/cms-content-types → main](https://github.com/Julien-Desbard/site-asso-hors-du-temps/pull/new/feat/cms-content-types)
-
-### Fait
+**Branche :** `feat/cms-content-types` → mergé `main` (commit `c93c8f7`)
 
 - [x] `Article` : titre, slug (uid), date, extrait, contenu (blocks), image_principale, galerie, lien_externe, a_la_une
 - [x] `MembreEquipe` : prenom, role, presentation, photo, ordre
@@ -54,10 +50,26 @@
 - [x] Traductions FR admin (`fr.json`) — labels champs + noms collections
 - [x] Seed bootstrap : 3 articles, 3 membres, 5 étapes
 
-### Critère de vérif (à valider en local)
+---
+
+## Chunk 2 — Shell Next (layout, CSS, header/footer) 🔍
+
+**Branche :** `feat/web-shell` (commit `091ef75`)
+
+**PR :** [#2 feat/web-shell → main](https://github.com/Julien-Desbard/site-asso-hors-du-temps/pull/2)
+
+### Fait
+
+- [x] `globals.css` : design system complet — palette cream/teal/brick, CSS custom properties, fonts Google (Cormorant Garamond, Caveat, Nunito, Patrick Hand), utilitaires `.wrap`, `.btn-*`, `.scrib`
+- [x] `Header` : nav sticky backdrop-blur, lien actif `usePathname`, burger mobile
+- [x] `Footer` : contact asso, réseaux sociaux (LinkedIn + Facebook), copyright
+- [x] `RootLayout` : Header + main + Footer sur toutes les pages
+- [x] Assets : logo, lieu.png, jardin.png dans `public/`
+- [x] Fix CI : `@eslint/eslintrc` ajouté, ignore `.next/` et `next-env.d.ts`
+
+### Critère de vérif
 
 ```bash
-cd apps/cms && cp .env.example .env  # remplir les secrets
-pnpm dev  # admin FR sur http://localhost:1337/admin
-# /api/articles /api/membre-equipes /api/etape-accueils → JSON
+pnpm --filter @hors-du-temps/web dev
+# http://localhost:3000 → header + footer, nav active, responsive mobile OK
 ```
