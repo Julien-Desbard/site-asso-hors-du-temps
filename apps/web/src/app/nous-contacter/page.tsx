@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
+import ContactForm from '@/components/ContactForm';
 import PageHero from '@/components/PageHero';
+import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: "Nous contacter — L'Hors du Temps",
   description:
     "Contactez L'Hors du Temps : un message suffit, nous vous répondrons dès que possible.",
 };
+
+const AUTO_REPLY = "« Un grand merci de votre intérêt pour notre association, nous vous répondrons dès que possible ! Bien à vous. L'équipe de l'Hors du Temps. »";
 
 export default function NousContacterPage() {
   return (
@@ -18,19 +22,21 @@ export default function NousContacterPage() {
 
       <section className="section">
         <div className="wrap">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.9fr', gap: 56, alignItems: 'start' }}>
-            {/* PLACEHOLDER formulaire — implémenté Chunk 6 */}
-            <div style={{ background: '#fff', borderRadius: 16, padding: '36px 34px', boxShadow: '0 18px 40px -22px rgba(0,0,0,0.22)' }}>
-              <p style={{ fontFamily: 'var(--font-hand)', fontSize: 24, color: 'var(--teal-deep)', marginBottom: 12 }}>Formulaire de contact</p>
-              <p style={{ color: 'var(--ink-soft)', fontSize: 16 }}>Le formulaire sera disponible très prochainement. En attendant, écrivez-nous directement :</p>
-              <p style={{ marginTop: 16 }}>
-                <a href="mailto:asso.horsdutemps@gmail.com" style={{ color: 'var(--brick)', fontWeight: 700 }}>asso.horsdutemps@gmail.com</a>
-              </p>
+          <div className={styles.grid}>
+            {/* FORMULAIRE */}
+            <div className={styles.formCard}>
+              <ContactForm />
             </div>
 
-            {/* COORDONNÉES */}
+            {/* COLONNE DROITE */}
             <div>
-              <div className="prose">
+              <div className={styles.confirmBox}>
+                <span className="scrib scrib-teal" style={{ fontSize: 26, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Notre réponse automatique</span>
+                <p className={styles.confirmIntro}>Dès l&rsquo;envoi, vous recevez une copie de votre message accompagnée de ce mot :</p>
+                <blockquote className={styles.autoReply}>{AUTO_REPLY}</blockquote>
+              </div>
+
+              <div className="prose" style={{ marginTop: 32 }}>
                 <h3>En direct</h3>
                 <p><strong>Courriel —</strong> <a href="mailto:asso.horsdutemps@gmail.com" style={{ color: 'var(--brick)' }}>asso.horsdutemps@gmail.com</a></p>
                 <p><strong>Mobile —</strong> <a href="tel:+33748101994" style={{ color: 'var(--brick)' }}>07 48 10 19 94</a></p>
