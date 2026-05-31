@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: "L'Hors du Temps — Une maison pour souffler à Saint-Marcellin",
@@ -11,7 +14,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
