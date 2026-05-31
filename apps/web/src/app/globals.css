@@ -162,6 +162,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   margin-bottom: 18px;
   border: 1px dashed #cdbf9f;
   overflow: hidden;
+  position: relative;
 }
 .member-body { padding: 0 12px; }
 .member-body h3 { font-family: var(--font-serif); font-size: 26px; font-weight: 600; }
