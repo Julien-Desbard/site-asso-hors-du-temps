@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
+import { getMembresEquipe } from '@/lib/strapi';
+import type { MembreEquipe } from '@hors-du-temps/types';
 
 export const metadata: Metadata = {
   title: "Qui sommes-nous ? — L'Hors du Temps",
@@ -46,8 +49,6 @@ const TIMELINE = [
   },
 ];
 
-const TEAM_PLACEHOLDER = [1, 2, 3];
-
 const PRESSE_LINKS = [
   { year: '2026', title: "Titre de l'article ou de l'interview", source: 'Nom du média — quelques mots de contexte', href: '#' },
   { year: '2025', title: "Titre de l'article ou de l'interview", source: 'Nom du média — quelques mots de contexte', href: '#' },
@@ -60,7 +61,21 @@ const RAPPORTS = [
   { year: '2023', title: "Rapport d'activité 2023", note: 'PDF — à déposer', href: '#' },
 ];
 
-export default function QuiSommesNousPage() {
+const STRAPIBASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
+
+const PLACEHOLDER_MEMBRES: MembreEquipe[] = [1, 2, 3].map((n) => ({
+  id: -n, documentId: String(n), prenom: 'Prénom', role: "Son rôle dans l'équipe",
+  presentation: "Un petit texte de présentation : ce qui l'a amené·e à l'association, ce qu'il/elle y fait.",
+  photo: null, ordre: n, publishedAt: null,
+}));
+
+export default async function QuiSommesNousPage() {
+  let membres: MembreEquipe[] = PLACEHOLDER_MEMBRES;
+  try {
+    const fetched = await getMembresEquipe();
+    if (fetched.length > 0) membres = fetched;
+  } catch { /* Strapi indisponible */ }
+
   return (
     <>
       <PageHero
@@ -105,16 +120,26 @@ export default function QuiSommesNousPage() {
             <p className="intro">Bénévoles, accueillants, jardiniers, musiciens du dimanche… Voici celles et ceux qui font vivre l&rsquo;Hors du Temps au quotidien.</p>
           </div>
           <div className="team-grid">
-            {TEAM_PLACEHOLDER.map((n) => (
-              <article key={n} className="member">
-                <div className="member-photo">photo (avec accord) · 4:5</div>
-                <div className="member-body">
-                  <h3>Prénom</h3>
-                  <div className="member-role">Son rôle dans l&rsquo;équipe</div>
-                  <p>Un petit texte de présentation : ce qui l&rsquo;a amené·e à l&rsquo;association, ce qu&rsquo;il/elle y fait, ce qui le/la touche dans cette aventure.</p>
-                </div>
-              </article>
-            ))}
+            {membres.map((m) => {
+              const photo = m.photo;
+              const photoUrl = photo ? (photo.url.startsWith('http') ? photo.url : `${STRAPIBASE}${photo.url}`) : null;
+              return (
+                <article key={m.id} className="member">
+                  <div className="member-photo">
+                    {photoUrl ? (
+                      <Image src={photoUrl} alt={photo?.alternativeText ?? m.prenom} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 33vw" />
+                    ) : (
+                      'photo (avec accord) · 4:5'
+                    )}
+                  </div>
+                  <div className="member-body">
+                    <h3>{m.prenom}</h3>
+                    <div className="member-role">{m.role}</div>
+                    <p>{m.presentation}</p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
