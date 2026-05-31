@@ -17,6 +17,7 @@ env:
   # Next env
   NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
   NEXT_PUBLIC_STRAPI_TOKEN: ""
+  NEXT_PUBLIC_SITE_URL: https://assohorsdutemps.fr
 
 jobs:
   ci:
