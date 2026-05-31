@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
@@ -130,7 +131,7 @@ export default function QuiSommesNousPage() {
               <p>Les <strong>Dimanches Ensemble</strong>, ce sont des rendez-vous ouverts à toutes et tous : personnes accueillies, bénévoles, voisins, curieux de passage. On partage un repas, on prend le temps, on joue de la musique, on rit, on souffle — ensemble.</p>
               <p>Pas besoin de s&rsquo;inscrire ni de prévoir quoi que ce soit : venez comme vous êtes. C&rsquo;est souvent la plus belle porte d&rsquo;entrée pour découvrir l&rsquo;esprit de la maison.</p>
               <p>Retrouvez les <strong>prochaines dates</strong> sur le dernier flyer ci-contre.</p>
-              <a className="btn btn-teal" href="/actualites" style={{ marginTop: 16, display: 'inline-block' }}>Voir les prochaines dates →</a>
+              <Link className="btn btn-teal" href="/actualites" style={{ marginTop: 16, display: 'inline-block' }}>Voir les prochaines dates →</Link>
             </div>
             <div className="flyer-ph">dernier flyer<br />Dimanches Ensemble<br />(image à fournir)</div>
           </div>
