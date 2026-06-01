@@ -12,7 +12,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h5>Nous contacter</h5>
+          <h5 className={styles.sectionTitle}>Nous contacter</h5>
           <div className={styles.contactName}>Association Ensemble pour l&rsquo;Hors du temps</div>
           <ul className={styles.contactList}>
             <li>
