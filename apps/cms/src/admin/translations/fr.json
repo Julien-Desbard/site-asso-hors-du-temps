@@ -54,5 +54,13 @@
     "content-manager.content-types.api::etape-accueil.etape-accueil.titre": "Titre",
     "content-manager.content-types.api::etape-accueil.etape-accueil.tag": "Tag (ex: on vous écoute)",
     "content-manager.content-types.api::etape-accueil.etape-accueil.description": "Description",
-    "content-manager.content-types.api::etape-accueil.etape-accueil.ordre": "Ordre (1, 2, 3…)"
+    "content-manager.content-types.api::etape-accueil.etape-accueil.ordre": "Ordre (1, 2, 3…)",
+
+    "historique": "Historique",
+    "content-manager.content-types.api::historique.historique.recit": "Récit (paragraphes séparés par une ligne vide)",
+
+    "frise-historique": "Frise historique",
+    "content-manager.content-types.api::frise-historique.frise-historique.annee": "Année",
+    "content-manager.content-types.api::frise-historique.frise-historique.evenement": "Événement (libellé court)",
+    "content-manager.content-types.api::frise-historique.frise-historique.ordre": "Ordre d'affichage"
 }

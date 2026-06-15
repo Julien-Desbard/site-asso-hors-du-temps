@@ -16,7 +16,7 @@ const STATIC_ARTICLES = [
 const PORTES = [
   { href: '/qui-sommes-nous', bg: '#e8e0d0', titre: 'Qui sommes-nous ?', desc: "Notre histoire depuis 2010, l'équipe actuelle, les Dimanches Ensemble et ce qu'on dit de nous.", cta: 'En savoir plus' },
   { href: '/etre-accueilli', bg: '#f4dccb', titre: 'Je souhaite être accueilli', desc: "Vous traversez une période difficile ? Découvrez les modalités de l'accueil, pas à pas.", cta: 'Préparer ma venue' },
-  { href: '/benevolat', bg: '#dfe7d2', titre: "J'aimerais être bénévole", desc: "Rejoignez l'équipe d'accueil, le jardin ou les Dimanches ensemble — il y a une place pour vous.", cta: 'Voir les missions' },
+  { href: '/benevolat', bg: '#dfe7d2', titre: "J'aimerais être bénévole", desc: "Rejoignez l'équipe d'accueil, le Fonds de dotation ou les Dimanches Ensemble — il y a une place pour vous.", cta: 'Voir les missions' },
   { href: '/#don', bg: '#f0d9a8', titre: 'Je fais un don', desc: "Soutenez le fonctionnement quotidien — ou le rachat de la maison via le fonds de dotation.", cta: "Soutenir l'association" },
 ];
 
@@ -40,14 +40,15 @@ export default async function HomePage() {
             <span className="scrib scrib-teal" style={{ fontSize: 36, transform: 'rotate(-2deg)', display: 'inline-block', marginBottom: 6 }}>
               Bienvenue à L&rsquo;Hors du Temps
             </span>
-            <h1>
-              Un endroit où <span className="home-hero-hl">se poser</span>
-              <br />quand on n&rsquo;en peut plus.
-            </h1>
+            <p className="home-hero-tagline">
+              Un lieu paisible où <span className="home-hero-hl">se poser</span>
+              <br />pour les personnes
+              <br />qui n&rsquo;en peuvent plus.
+            </p>
             <p className="home-hero-lead">
-              Depuis 2010, notre maison à Saint-Marcellin accueille pour quelques jours
-              celles et ceux qui ont besoin de faire une halte, de souffler,
-              de retrouver confiance — en lien avec d&rsquo;autres et avec la nature.
+              Depuis 2010, notre association accueille des personnes ayant un parcours de vie difficile
+              à St Marcellin en Isère. Cet accueil permet à chacun de faire une halte, de se reposer,
+              de reprendre confiance en soi et de se ressourcer en lien avec les autres et la nature.
             </p>
             <div className="home-hero-actions">
               <Link href="/etre-accueilli" className="btn btn-primary">Je souhaite être accueilli</Link>
@@ -123,6 +124,9 @@ export default async function HomePage() {
               );
             })}
           </div>
+          <div className="actus-cta">
+            <Link href="/actualites" className="btn btn-primary">Voir toutes les actualités →</Link>
+          </div>
         </div>
       </section>
 
@@ -162,7 +166,7 @@ export default async function HomePage() {
             <div className="don-card">
               <span className="don-eyebrow">Au quotidien</span>
               <h3>Pour le fonctionnement de l&rsquo;association</h3>
-              <p>Nourrir, chauffer, entretenir la maison et accompagner les personnes accueillies. Votre don nous aide à faire vivre l&rsquo;accueil jour après jour.</p>
+              <p>Pour accompagner les personnes accueillies mais aussi pour les repas, le chauffage ou encore l&rsquo;entretien de la maison. Votre don nous aide à faire vivre l&rsquo;accueil jour après jour.</p>
               <a className="btn btn-dark" href="https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2" target="_blank" rel="noopener noreferrer">Donner via HelloAsso →</a>
             </div>
             <div className="don-card don-card-dotation">

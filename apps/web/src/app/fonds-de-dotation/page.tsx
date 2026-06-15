@@ -1,15 +1,38 @@
 import type { Metadata } from 'next';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import PageHero from '@/components/PageHero';
+
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
 
 export const metadata: Metadata = {
   title: "Fonds de dotation — Participez au rachat de la maison | L'Hors du Temps",
   description:
-    "Le fonds de dotation « La maison Hors du Temps » : participez au rachat de la maison pour qu'elle reste un lieu de répit.",
+    "Participez au rachat de la maison de répit L'Hors du Temps (Saint-Marcellin, Isère) via le fonds de dotation. Don déductible à 66 % des impôts. Échéance 2027.",
+};
+
+const donateSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'DonateAction',
+  agent: { '@type': 'Organization', '@id': `${BASE}/#organization`, name: "L'Hors du Temps" },
+  recipient: { '@type': 'Organization', '@id': `${BASE}/#organization`, name: "L'Hors du Temps" },
+  description:
+    "Les dons au fonds de dotation « La maison Hors du Temps » ouvrent droit à une réduction d'impôt de 66 % du montant versé (article 200 du CGI), dans la limite de 20 % du revenu imposable. Le fonds finance le rachat de la maison de Saint-Marcellin avant fin 2027.",
+  url: `${BASE}/fonds-de-dotation`,
+  target: {
+    '@type': 'EntryPoint',
+    urlTemplate: 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2',
+    actionPlatform: ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform'],
+  },
 };
 
 export default function FondsDeDotationPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Fonds de dotation', url: 'https://assohorsdutemps.fr/fonds-de-dotation' }]} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(donateSchema) }}
+      />
       <PageHero
         scrib="Urgence 2027"
         title="Participez au rachat de la maison"
@@ -21,7 +44,7 @@ export default function FondsDeDotationPage() {
         <div className="wrap">
           <div className="flyer-block">
             <div className="prose">
-              <h3>Pourquoi un fonds de dotation ?</h3>
+              <h2>Pourquoi un fonds de dotation ?</h2>
               <p>Depuis 2010, la maison de Saint-Marcellin accueille celles et ceux qui ont besoin de souffler. <strong>En 2027, la propriété sera mise en vente.</strong> Pour ne pas perdre ce lieu unique, nous devons pouvoir le racheter.</p>
               <p>En février 2026, l&rsquo;association a créé le fonds de dotation <strong>« La maison Hors du Temps »</strong>. Il permet de collecter des dons dédiés au rachat, d&rsquo;accueillir le mécénat d&rsquo;entreprise et d&rsquo;ouvrir droit à des réductions fiscales.</p>
               <p>Chaque contribution, petite ou grande, nous rapproche du but : que la maison continue, longtemps, d&rsquo;être un endroit où se poser.</p>
@@ -53,6 +76,9 @@ export default function FondsDeDotationPage() {
               <span>de réduction d&rsquo;impôt sur votre don</span>
             </div>
           </div>
+          <p className="intro" style={{ marginTop: 32 }}>
+            Les dons au fonds de dotation ouvrent droit à une <strong>réduction d&rsquo;impôt de 66 % du montant versé</strong> (article&nbsp;200 du Code général des impôts), dans la limite de 20&nbsp;% du revenu imposable. Pour un don de 100&nbsp;€, le coût réel après réduction fiscale est de <strong>34&nbsp;€</strong>.
+          </p>
         </div>
       </section>
 

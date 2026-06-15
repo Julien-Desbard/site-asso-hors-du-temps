@@ -4,6 +4,24 @@ import type { Core } from '@strapi/strapi';
 // Supprimer ce fichier (ou vider seedData) en production.
 
 const seedData = {
+  historique: {
+    recit: `L'Hors du temps a été créé sur une idée de Carole, qui a connu bien des galères, la précarité et a souhaité, avec son mari Bernard, trouver un lieu d'accueil pour que des personnes en difficulté de toutes sortes puissent se poser et qu'on "leur fiche la paix !", sans qu'on leur demande de s'inscrire dans un programme quelconque.
+
+Séduit par ce projet, un propriétaire a proposé de louer sa grande maison pour un bail de très longue durée, située sur les côteaux de Saint-Marcellin, petite ville en Isère. La maison se situe à mi-chemin entre Grenoble et Valence dans la vallée du Sud-Grésivaudan, au pied des montagnes du Vercors.
+
+Durant des années, Carole et Bernard ont accueilli de nombreuses personnes qui ont passé un temps plus ou moins long avec eux avant de reprendre leur route, de retrouver leur chemin...
+
+Au décès de Carole, un autre couple est venu s'installer dans la maison de l'Hors du temps pour poursuivre ce généreux projet. Christine et Jean-Luc ont accueilli un grand nombre de personnes avec l'aide de salariés et de bénévoles pendant près de 5 ans. Ce sont maintenant Régine et Christian qui ont repris le flambeau courant 2026.`,
+    publishedAt: new Date().toISOString(),
+  },
+  friseHistorique: [
+    { annee: '2010', evenement: 'Fondation par Carole et Bernard', ordre: 1, publishedAt: new Date().toISOString() },
+    { annee: '2015', evenement: 'Équipe de bénévoles réguliers constituée', ordre: 2, publishedAt: new Date().toISOString() },
+    { annee: '2019', evenement: 'Lancement des Dimanches Ensemble', ordre: 3, publishedAt: new Date().toISOString() },
+    { annee: '2024', evenement: 'Nouveau rythme : un dimanche sur trois', ordre: 4, publishedAt: new Date().toISOString() },
+    { annee: '2026', evenement: 'Création du fonds de dotation & nouvelle équipe accueillante', ordre: 5, publishedAt: new Date().toISOString() },
+    { annee: '2027', evenement: 'Objectif : rachat de la maison', ordre: 6, publishedAt: new Date().toISOString() },
+  ],
   articles: [
     {
       titre: 'Aidez-nous à racheter la maison !',
@@ -143,6 +161,29 @@ export default {
           .create({ data });
       }
       strapi.log.info('[seed] Étapes accueil insérées');
+    }
+
+    // Single type — vérifie si le champ recit est vide (single type retourne null si non créé)
+    const historiqueExisting = await strapi
+      .documents('api::historique.historique')
+      .findFirst({});
+    if (!historiqueExisting) {
+      await strapi
+        .documents('api::historique.historique')
+        .create({ data: seedData.historique });
+      strapi.log.info('[seed] Historique inséré');
+    }
+
+    const friseCount = await strapi
+      .documents('api::frise-historique.frise-historique')
+      .count({});
+    if (friseCount === 0) {
+      for (const data of seedData.friseHistorique) {
+        await strapi
+          .documents('api::frise-historique.frise-historique')
+          .create({ data });
+      }
+      strapi.log.info('[seed] Frise historique insérée');
     }
   },
 };

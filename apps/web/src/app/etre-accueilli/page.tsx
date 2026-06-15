@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Link from 'next/link';
 import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
@@ -28,18 +29,20 @@ export default async function EtreAccueilliPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Être accueilli', url: 'https://assohorsdutemps.fr/etre-accueilli' }]} />
       <PageHero
         scrib="Vous avez besoin de souffler"
         title="Être accueilli"
         lead="Vous traversez une période difficile et vous avez besoin de faire une halte ? La maison vous est ouverte pour quelques jours, le temps de reprendre pied. Voici comment cela se passe."
       />
 
-      {/* INTRO */}
+      {/* INTRO — bloc réponse directe (citable LLM) */}
       <section className="section">
         <div className="wrap">
           <div className="prose">
             <p><strong>L&rsquo;Hors du Temps accueille pour quelques jours</strong> celles et ceux qui ont besoin de se poser : après une épreuve, un deuil, une fatigue profonde, un passage à vide. On y vient pour souffler, retrouver un rythme, du lien, et un peu de confiance.</p>
-            <p>L&rsquo;accueil est gratuit et repose sur la confiance. Il n&rsquo;y a rien à prouver, rien à payer : juste à être là. La maison est un lieu de vie partagé, en lien avec d&rsquo;autres personnes accueillies et avec les bénévoles.</p>
+            <p>L&rsquo;accueil est <strong>entièrement gratuit</strong>, sans conditions de ressources ni prescription médicale. Il n&rsquo;y a rien à prouver, rien à payer : juste à être là. La maison est un lieu de vie partagé, en lien avec d&rsquo;autres personnes accueillies et avec les bénévoles.</p>
+            <p>Pour venir, il suffit de nous appeler ou de nous écrire. L&rsquo;accueil se fait toujours après un premier échange — pour faire connaissance, présenter la maison, et vérifier ensemble que le séjour vous correspond.</p>
           </div>
         </div>
       </section>

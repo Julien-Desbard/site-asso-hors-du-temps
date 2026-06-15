@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ContactForm from '@/components/ContactForm';
 import PageHero from '@/components/PageHero';
 import styles from './page.module.css';
@@ -14,6 +15,7 @@ const AUTO_REPLY = "« Un grand merci de votre intérêt pour notre association,
 export default function NousContacterPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Nous contacter', url: 'https://assohorsdutemps.fr/nous-contacter' }]} />
       <PageHero
         scrib="Écrivez-nous"
         title="Nous contacter"

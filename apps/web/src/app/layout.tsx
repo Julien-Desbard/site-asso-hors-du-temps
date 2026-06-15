@@ -12,15 +12,65 @@ export const metadata: Metadata = {
     template: "%s — L'Hors du Temps",
   },
   description:
-    "L'Hors du Temps : une maison à Saint-Marcellin (Isère) qui accueille pour quelques jours celles et ceux qui ont besoin de faire une halte.",
+    "L'Hors du Temps : lieu de répit bénévole à Saint-Marcellin (Isère). Accueil gratuit pour quelques jours pour souffler, retrouver confiance et du lien. Association loi 1901 fondée en 2010.",
   openGraph: {
     siteName: "L'Hors du Temps",
     locale: 'fr_FR',
     type: 'website',
-    images: [{ url: '/logo.png', width: 800, height: 200, alt: "L'Hors du Temps" }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: "L'Hors du Temps — lieu de répit à Saint-Marcellin" }],
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
+};
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': ['Organization', 'NGO'],
+  '@id': `${BASE}/#organization`,
+  name: "L'Hors du Temps",
+  alternateName: "Ensemble pour l'Hors du Temps",
+  url: BASE,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${BASE}/logo.png`,
+  },
+  description:
+    "L'Hors du Temps est un lieu de répit bénévole à Saint-Marcellin (Isère), association loi 1901 fondée en 2010, qui accueille gratuitement des adultes en situation de fragilité pour des séjours de quelques jours à plusieurs semaines.",
+  foundingDate: '2010',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '24 rue de la Fusilière',
+    addressLocality: 'Saint-Marcellin',
+    postalCode: '38160',
+    addressRegion: 'Isère',
+    addressCountry: 'FR',
+  },
+  telephone: '+33748101994',
+  email: 'asso.horsdutemps@gmail.com',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+33748101994',
+    email: 'asso.horsdutemps@gmail.com',
+    contactType: 'customer support',
+    availableLanguage: 'French',
+    areaServed: 'FR',
+  },
+  sameAs: [
+    'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2',
+    'https://www.jeveuxaider.gouv.fr/organisations/18543-ensemble-pour-l-hors-du-temps',
+    'https://www.facebook.com/people/Association-lHors-du-temps/61583118786303/',
+  ],
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${BASE}/#website`,
+  url: BASE,
+  name: "L'Hors du Temps",
+  description: "Site officiel de l'association L'Hors du Temps — lieu de répit bénévole à Saint-Marcellin, Isère.",
+  inLanguage: 'fr-FR',
+  publisher: { '@id': `${BASE}/#organization` },
 };
 
 export default function RootLayout({
@@ -28,6 +78,18 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body>
         <a href="#main-content" className="skip-link">Aller au contenu principal</a>
         <Header />

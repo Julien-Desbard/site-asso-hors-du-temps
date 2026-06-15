@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import Link from 'next/link';
 import Callout from '@/components/Callout';
@@ -54,6 +55,7 @@ export default async function ActualitesPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Actualités', url: 'https://assohorsdutemps.fr/actualites' }]} />
       <PageHero
         scrib="Des nouvelles de la maison"
         title="Actualités"

@@ -1,17 +1,14 @@
 import type { NextConfig } from 'next';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      ...(isDev
+        ? [{ protocol: 'http' as const, hostname: 'localhost', port: '1337', pathname: '/uploads/**' }]
+        : []),
       {
-        // Strapi local dev
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '1337',
-        pathname: '/uploads/**',
-      },
-      {
-        // Cloudinary (prod)
         protocol: 'https',
         hostname: 'res.cloudinary.com',
       },

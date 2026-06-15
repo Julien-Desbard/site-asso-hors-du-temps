@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import { getArticleBySlug, getArticles } from '@/lib/strapi';
 
 interface Props {
@@ -35,6 +36,8 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
+
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
 
@@ -50,9 +53,45 @@ export default async function ArticlePage({ params }: Props) {
   const strapiBase = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
   const img = article.image_principale;
   const imgUrl = img ? (img.url.startsWith('http') ? img.url : `${strapiBase}${img.url}`) : null;
+  const canonicalUrl = `${BASE}/actualites/${article.slug}`;
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': canonicalUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+    headline: article.titre,
+    description: article.extrait,
+    ...(imgUrl && { image: { '@type': 'ImageObject', url: imgUrl } }),
+    datePublished: article.date,
+    author: {
+      '@type': 'Organization',
+      '@id': `${BASE}/#organization`,
+      name: "L'Hors du Temps",
+    },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${BASE}/#organization`,
+      name: "L'Hors du Temps",
+    },
+    inLanguage: 'fr-FR',
+    isPartOf: {
+      '@type': 'Blog',
+      '@id': `${BASE}/actualites`,
+      name: "Actualités — L'Hors du Temps",
+    },
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <BreadcrumbJsonLd items={[
+        { name: 'Actualités', url: 'https://assohorsdutemps.fr/actualites' },
+        { name: article.titre, url: canonicalUrl },
+      ]} />
       <section style={{ background: 'var(--cream)', padding: '64px 0 56px', borderBottom: '1px solid #e6dcc6' }}>
         <div className="wrap">
           <Link href="/actualites" style={{ fontFamily: 'var(--font-hand)', fontSize: 18, color: 'var(--ink-soft)', display: 'inline-block', marginBottom: 20 }}>

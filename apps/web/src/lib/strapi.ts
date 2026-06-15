@@ -1,4 +1,4 @@
-import type { Article, EtapeAccueil, MembreEquipe, StrapiResponse } from '@hors-du-temps/types';
+import type { Article, EtapeAccueil, FriseHistorique, Historique, MembreEquipe, StrapiResponse } from '@hors-du-temps/types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
 const TOKEN = process.env.NEXT_PUBLIC_STRAPI_TOKEN ?? '';
@@ -13,7 +13,7 @@ async function strapiGet<T>(path: string, params?: Record<string, string>): Prom
 
   const res = await fetch(url.toString(), {
     headers: TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {},
-    next: { tags: [path.replace(/^\//, '').split('/')[0]] },
+    next: { revalidate: 3600, tags: [path.replace(/^\//, '').split('/')[0]] },
   });
 
   if (!res.ok) throw new Error(`Strapi ${res.status} ${path}`);
@@ -41,6 +41,19 @@ export async function getMembresEquipe(): Promise<MembreEquipe[]> {
   const data = await strapiGet<StrapiResponse<MembreEquipe[]>>('/membre-equipes', {
     'populate': 'photo',
     'sort': 'ordre:asc',
+  });
+  return data.data;
+}
+
+export async function getHistorique(): Promise<Historique | null> {
+  const data = await strapiGet<{ data: Historique | null }>('/historique');
+  return data.data;
+}
+
+export async function getFriseHistorique(): Promise<FriseHistorique[]> {
+  const data = await strapiGet<StrapiResponse<FriseHistorique[]>>('/frise-historiques', {
+    'sort': 'ordre:asc',
+    'pagination[pageSize]': '50',
   });
   return data.data;
 }

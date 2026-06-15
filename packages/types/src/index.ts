@@ -63,6 +63,22 @@ export interface MembreEquipe {
   publishedAt: string | null;
 }
 
+/** Récit narratif de l'historique de l'association (single type) */
+export interface Historique {
+  recit: string;
+  publishedAt: string | null;
+}
+
+/** Entrée de la frise chronologique */
+export interface FriseHistorique {
+  id: number;
+  documentId: string;
+  annee: string;
+  evenement: string;
+  ordre: number;
+  publishedAt: string | null;
+}
+
 /** Étape du processus d'accueil */
 export interface EtapeAccueil {
   id: number;

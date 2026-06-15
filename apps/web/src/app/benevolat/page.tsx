@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function BenevolatPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Bénévolat', url: 'https://assohorsdutemps.fr/benevolat' }]} />
       <PageHero
         scrib="Donner un peu de son temps"
         title="Bénévolat"
@@ -30,6 +32,7 @@ export default function BenevolatPage() {
       {/* DEUX PISTES */}
       <section className="section section-cream">
         <div className="wrap">
+          <h2 className="sr-only">Deux façons de nous rejoindre</h2>
           <div className="duo">
             <div className="act-card">
               <span className="act-eyebrow">Donner de son temps</span>
