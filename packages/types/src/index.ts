@@ -89,3 +89,24 @@ export interface EtapeAccueil {
   ordre: number;
   publishedAt: string | null;
 }
+
+/** Paramètres globaux éditables (liens dons, bénévolat, réseaux) */
+export interface Parametre {
+  don_fonctionnement_url: string | null;
+  don_fonds_dotation_url: string | null;
+  benevolat_url: string | null;
+  facebook_url: string | null;
+  mecenat_url: string | null;
+}
+
+/** Dimanches Ensemble — flyer media */
+export interface Dimanche {
+  flyer: StrapiImage | null;
+}
+
+/** Page Accueil (Être accueilli) — vie commune et activités */
+export interface AccueilPage {
+  vie_commune_texte: string | null;
+  vie_commune_image: StrapiImage | null;
+  activites_texte: string | null;
+}

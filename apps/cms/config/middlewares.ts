@@ -6,9 +6,8 @@ export default [
 		name: "strapi::cors",
 		config: {
 			origin: [
-				"https://bar-du-centre.vercel.app/",
+				"https://assohorsdutemps.fr",
 				"http://localhost:3000",
-				"https://bdc-angers.fr",
 			],
 			methods: ["GET", "POST", "PUT", "DELETE"],
 			headers: ["Content-Type", "Authorization"],

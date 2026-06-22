@@ -181,6 +181,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 
 /* -------- steps -------- */
 .steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.steps-stack { grid-template-columns: 1fr; max-width: 760px; }
 .step {
   background: #fff;
   border-radius: 16px;

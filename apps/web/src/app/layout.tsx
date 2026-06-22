@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import { getParametres } from '@/lib/strapi';
 import './globals.css';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
@@ -23,45 +24,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': ['Organization', 'NGO'],
-  '@id': `${BASE}/#organization`,
-  name: "L'Hors du Temps",
-  alternateName: "Ensemble pour l'Hors du Temps",
-  url: BASE,
-  logo: {
-    '@type': 'ImageObject',
-    url: `${BASE}/logo.png`,
-  },
-  description:
-    "L'Hors du Temps est un lieu de répit bénévole à Saint-Marcellin (Isère), association loi 1901 fondée en 2010, qui accueille gratuitement des adultes en situation de fragilité pour des séjours de quelques jours à plusieurs semaines.",
-  foundingDate: '2010',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '24 rue de la Fusilière',
-    addressLocality: 'Saint-Marcellin',
-    postalCode: '38160',
-    addressRegion: 'Isère',
-    addressCountry: 'FR',
-  },
-  telephone: '+33748101994',
-  email: 'asso.horsdutemps@gmail.com',
-  contactPoint: {
-    '@type': 'ContactPoint',
-    telephone: '+33748101994',
-    email: 'asso.horsdutemps@gmail.com',
-    contactType: 'customer support',
-    availableLanguage: 'French',
-    areaServed: 'FR',
-  },
-  sameAs: [
-    'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2',
-    'https://www.jeveuxaider.gouv.fr/organisations/18543-ensemble-pour-l-hors-du-temps',
-    'https://www.facebook.com/people/Association-lHors-du-temps/61583118786303/',
-  ],
-};
-
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -73,9 +35,56 @@ const websiteSchema = {
   publisher: { '@id': `${BASE}/#organization` },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  let sameAs: string[] = [];
+  try {
+    const params = await getParametres();
+    if (params) {
+      sameAs = [
+        params.don_fonctionnement_url,
+        params.benevolat_url,
+        params.facebook_url,
+      ].filter((url): url is string => Boolean(url));
+    }
+  } catch { /* Strapi indisponible */ }
+
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': ['Organization', 'NGO'],
+    '@id': `${BASE}/#organization`,
+    name: "L'Hors du Temps",
+    alternateName: "Ensemble pour l'Hors du Temps",
+    url: BASE,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${BASE}/logo.png`,
+    },
+    description:
+      "L'Hors du Temps est un lieu de répit bénévole à Saint-Marcellin (Isère), association loi 1901 fondée en 2010, qui accueille gratuitement des adultes en situation de fragilité pour des séjours de quelques jours à plusieurs semaines.",
+    foundingDate: '2010',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '24 rue de la Fusilière',
+      addressLocality: 'Saint-Marcellin',
+      postalCode: '38160',
+      addressRegion: 'Isère',
+      addressCountry: 'FR',
+    },
+    telephone: '+33748101994',
+    email: 'asso.horsdutemps@gmail.com',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+33748101994',
+      email: 'asso.horsdutemps@gmail.com',
+      contactType: 'customer support',
+      availableLanguage: 'French',
+      areaServed: 'FR',
+    },
+    sameAs,
+  };
+
   return (
     <html lang="fr">
       <head>

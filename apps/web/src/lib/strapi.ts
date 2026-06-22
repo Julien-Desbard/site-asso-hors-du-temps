@@ -1,4 +1,4 @@
-import type { Article, EtapeAccueil, FriseHistorique, Historique, MembreEquipe, StrapiResponse } from '@hors-du-temps/types';
+import type { AccueilPage, Article, Dimanche, EtapeAccueil, FriseHistorique, Historique, MembreEquipe, Parametre, StrapiResponse } from '@hors-du-temps/types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
 const TOKEN = process.env.NEXT_PUBLIC_STRAPI_TOKEN ?? '';
@@ -61,6 +61,25 @@ export async function getFriseHistorique(): Promise<FriseHistorique[]> {
 export async function getEtapesAccueil(): Promise<EtapeAccueil[]> {
   const data = await strapiGet<StrapiResponse<EtapeAccueil[]>>('/etape-accueils', {
     'sort': 'ordre:asc',
+  });
+  return data.data;
+}
+
+export async function getParametres(): Promise<Parametre | null> {
+  const data = await strapiGet<{ data: Parametre | null }>('/parametre');
+  return data.data;
+}
+
+export async function getDimanches(): Promise<Dimanche | null> {
+  const data = await strapiGet<{ data: Dimanche | null }>('/dimanche', {
+    'populate': 'flyer',
+  });
+  return data.data;
+}
+
+export async function getAccueilPage(): Promise<AccueilPage | null> {
+  const data = await strapiGet<{ data: AccueilPage | null }>('/accueil-page', {
+    'populate': 'vie_commune_image',
   });
   return data.data;
 }

@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
-import { getFriseHistorique, getHistorique, getMembresEquipe } from '@/lib/strapi';
-import type { FriseHistorique, Historique, MembreEquipe } from '@hors-du-temps/types';
+import { getDimanches, getFriseHistorique, getHistorique, getMembresEquipe } from '@/lib/strapi';
+import type { FriseHistorique, MembreEquipe } from '@hors-du-temps/types';
 
 export const metadata: Metadata = {
   title: "Qui sommes-nous ? — L'Hors du Temps",
@@ -21,23 +21,6 @@ const SUBNAV = [
   { id: 'rapports', label: "Rapports d'activité" },
 ];
 
-const FALLBACK_RECIT = `L'Hors du temps a été créé sur une idée de Carole, qui a connu bien des galères, la précarité et a souhaité, avec son mari Bernard, trouver un lieu d'accueil pour que des personnes en difficulté de toutes sortes puissent se poser et qu'on "leur fiche la paix !", sans qu'on leur demande de s'inscrire dans un programme quelconque.
-
-Séduit par ce projet, un propriétaire a proposé de louer sa grande maison pour un bail de très longue durée, située sur les côteaux de Saint-Marcellin, petite ville en Isère. La maison se situe à mi-chemin entre Grenoble et Valence dans la vallée du Sud-Grésivaudan, au pied des montagnes du Vercors.
-
-Durant des années, Carole et Bernard ont accueilli de nombreuses personnes qui ont passé un temps plus ou moins long avec eux avant de reprendre leur route, de retrouver leur chemin...
-
-Au décès de Carole, un autre couple est venu s'installer dans la maison de l'Hors du temps pour poursuivre ce généreux projet. Christine et Jean-Luc ont accueilli un grand nombre de personnes avec l'aide de salariés et de bénévoles pendant près de 5 ans. Ce sont maintenant Régine et Christian qui ont repris le flambeau courant 2026.`;
-
-const FALLBACK_FRISE: FriseHistorique[] = [
-  { id: -1, documentId: '1', annee: '2010', evenement: 'Fondation par Carole et Bernard', ordre: 1, publishedAt: null },
-  { id: -2, documentId: '2', annee: '2015', evenement: 'Équipe de bénévoles réguliers constituée', ordre: 2, publishedAt: null },
-  { id: -3, documentId: '3', annee: '2019', evenement: 'Lancement des Dimanches Ensemble', ordre: 3, publishedAt: null },
-  { id: -4, documentId: '4', annee: '2024', evenement: 'Nouveau rythme : un dimanche sur trois', ordre: 4, publishedAt: null },
-  { id: -5, documentId: '5', annee: '2026', evenement: 'Création du fonds de dotation & nouvelle équipe', ordre: 5, publishedAt: null },
-  { id: -6, documentId: '6', annee: '2027', evenement: 'Objectif : rachat de la maison', ordre: 6, publishedAt: null },
-];
-
 // Ne pas ajouter d'entrées fictives ici — la section est masquée si tous les href sont '#'
 const PRESSE_LINKS: { year: string; title: string; source: string; href: string }[] = [];
 
@@ -46,29 +29,31 @@ const RAPPORTS: { year: string; title: string; note: string; href: string }[] = 
 
 const STRAPIBASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
 
-const PLACEHOLDER_MEMBRES: MembreEquipe[] = [1, 2, 3].map((n) => ({
-  id: -n, documentId: String(n), prenom: 'Prénom', role: "Son rôle dans l'équipe",
-  presentation: "Un petit texte de présentation : ce qui l'a amené·e à l'association, ce qu'il/elle y fait.",
-  photo: null, ordre: n, publishedAt: null,
-}));
-
 export default async function QuiSommesNousPage() {
-  let membres: MembreEquipe[] = PLACEHOLDER_MEMBRES;
-  let historique: Historique | null = null;
-  let frise: FriseHistorique[] = FALLBACK_FRISE;
+  let membres: MembreEquipe[] = [];
+  let recitParagraphes: string[] = [];
+  let frise: FriseHistorique[] = [];
+  let flyerUrl: string | null = null;
+  let flyerAlt: string | null = null;
 
   try {
-    const [fetchedMembres, fetchedHistorique, fetchedFrise] = await Promise.allSettled([
+    const [fetchedMembres, fetchedHistorique, fetchedFrise, fetchedDimanche] = await Promise.allSettled([
       getMembresEquipe(),
       getHistorique(),
       getFriseHistorique(),
+      getDimanches(),
     ]);
-    if (fetchedMembres.status === 'fulfilled' && fetchedMembres.value.length > 0) membres = fetchedMembres.value;
-    if (fetchedHistorique.status === 'fulfilled' && fetchedHistorique.value) historique = fetchedHistorique.value;
-    if (fetchedFrise.status === 'fulfilled' && fetchedFrise.value.length > 0) frise = fetchedFrise.value;
+    if (fetchedMembres.status === 'fulfilled') membres = fetchedMembres.value;
+    if (fetchedHistorique.status === 'fulfilled' && fetchedHistorique.value?.recit) {
+      recitParagraphes = fetchedHistorique.value.recit.split(/\n\n+/).filter(Boolean);
+    }
+    if (fetchedFrise.status === 'fulfilled') frise = fetchedFrise.value;
+    if (fetchedDimanche.status === 'fulfilled' && fetchedDimanche.value?.flyer) {
+      const flyer = fetchedDimanche.value.flyer;
+      flyerUrl = flyer.url.startsWith('http') ? flyer.url : `${STRAPIBASE}${flyer.url}`;
+      flyerAlt = flyer.alternativeText ?? 'Flyer Dimanches Ensemble';
+    }
   } catch { /* Strapi indisponible */ }
-
-  const recitParagraphes = (historique?.recit ?? FALLBACK_RECIT).split(/\n\n+/).filter(Boolean);
 
   return (
     <>
@@ -82,61 +67,65 @@ export default async function QuiSommesNousPage() {
       <SubNav items={SUBNAV} />
 
       {/* HISTORIQUE */}
-      <section className="section anchor" id="historique">
-        <div className="wrap">
-          <div className="section-head">
-            <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Depuis 2010</span>
-            <h2>Notre historique</h2>
-          </div>
-          <div className="historique-grid">
-            <div className="prose historique-recit">
-              {recitParagraphes.map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
+      {(recitParagraphes.length > 0 || frise.length > 0) && (
+        <section className="section anchor" id="historique">
+          <div className="wrap">
+            <div className="section-head">
+              <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Depuis 2010</span>
+              <h2>Notre historique</h2>
             </div>
-            <div className="historique-frise">
-              {frise.map((item) => (
-                <div key={item.id} className="frise-item">
-                  <span className="frise-annee lnum">{item.annee}</span>
-                  <span className="frise-evenement">{item.evenement}</span>
-                </div>
-              ))}
+            <div className="historique-grid">
+              <div className="prose historique-recit">
+                {recitParagraphes.map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
+              <div className="historique-frise">
+                {frise.map((item) => (
+                  <div key={item.id} className="frise-item">
+                    <span className="frise-annee lnum">{item.annee}</span>
+                    <span className="frise-evenement">{item.evenement}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ÉQUIPE */}
-      <section className="section section-cream anchor" id="equipe">
-        <div className="wrap">
-          <div className="section-head">
-            <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Les visages de la maison</span>
-            <h2>L&rsquo;équipe actuelle</h2>
+      {membres.length > 0 && (
+        <section className="section section-cream anchor" id="equipe">
+          <div className="wrap">
+            <div className="section-head">
+              <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Les visages de la maison</span>
+              <h2>L&rsquo;équipe actuelle</h2>
+            </div>
+            <div className="team-grid">
+              {membres.map((m) => {
+                const photo = m.photo;
+                const photoUrl = photo ? (photo.url.startsWith('http') ? photo.url : `${STRAPIBASE}${photo.url}`) : null;
+                return (
+                  <article key={m.id} className="member">
+                    <div className="member-photo">
+                      {photoUrl ? (
+                        <Image src={photoUrl} alt={photo?.alternativeText ?? m.prenom} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 33vw" />
+                      ) : (
+                        'photo (avec accord) · 4:5'
+                      )}
+                    </div>
+                    <div className="member-body">
+                      <h3>{m.prenom}</h3>
+                      <div className="member-role">{m.role}</div>
+                      <p>{m.presentation}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
-          <div className="team-grid">
-            {membres.map((m) => {
-              const photo = m.photo;
-              const photoUrl = photo ? (photo.url.startsWith('http') ? photo.url : `${STRAPIBASE}${photo.url}`) : null;
-              return (
-                <article key={m.id} className="member">
-                  <div className="member-photo">
-                    {photoUrl ? (
-                      <Image src={photoUrl} alt={photo?.alternativeText ?? m.prenom} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 33vw" />
-                    ) : (
-                      'photo (avec accord) · 4:5'
-                    )}
-                  </div>
-                  <div className="member-body">
-                    <h3>{m.prenom}</h3>
-                    <div className="member-role">{m.role}</div>
-                    <p>{m.presentation}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* DIMANCHES ENSEMBLE */}
       <section className="section anchor" id="dimanches">
@@ -150,7 +139,19 @@ export default async function QuiSommesNousPage() {
               <p>Depuis l&rsquo;été 2024, les Dimanches Ensemble permettent aux personnes qui le souhaitent de partager un moment convivial à l&rsquo;Hors du Temps un dimanche sur trois. Au programme, repas et jeux pour 10 personnes de St Marcellin ou des alentours. Vous pouvez aussi devenir bénévole d&rsquo;accueil spécifiquement pour les Dimanches Ensemble, contactez-nous si cela vous intéresse&nbsp;!</p>
               <p>Toutes les informations importantes (prochaines dates, participation, contact, etc) se trouvent sur le flyer ci-dessous&nbsp;:</p>
             </div>
-            <div className="flyer-ph">dernier flyer<br />Dimanches Ensemble<br />(image à fournir)</div>
+            {flyerUrl ? (
+              <div className="flyer-img" style={{ position: 'relative', minHeight: 400 }}>
+                <Image
+                  src={flyerUrl}
+                  alt={flyerAlt ?? 'Flyer Dimanches Ensemble'}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            ) : (
+              <div className="flyer-ph">dernier flyer<br />Dimanches Ensemble<br />(image à fournir)</div>
+            )}
           </div>
         </div>
       </section>

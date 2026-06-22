@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+import Image from 'next/image';
 import Link from 'next/link';
 import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
-import { getEtapesAccueil } from '@/lib/strapi';
-import type { EtapeAccueil } from '@hors-du-temps/types';
+import SubNav from '@/components/SubNav';
+import { getAccueilPage, getEtapesAccueil } from '@/lib/strapi';
+import type { AccueilPage, EtapeAccueil } from '@hors-du-temps/types';
 
 export const metadata: Metadata = {
   title: "Être accueilli — L'Hors du Temps",
@@ -12,20 +14,31 @@ export const metadata: Metadata = {
     "Comment se déroule un accueil à L'Hors du Temps : les étapes, de la prise de contact au séjour à la maison.",
 };
 
-const STATIC_STEPS: EtapeAccueil[] = [
-  { id: 1, documentId: '1', titre: 'Prendre contact', tag: 'on vous écoute', description: "Vous, un proche ou un travailleur social nous appelez ou nous écrivez. On échange simplement sur votre situation et votre besoin de répit.", ordre: 1, publishedAt: null },
-  { id: 2, documentId: '2', titre: 'Faire connaissance', tag: 'sans jugement', description: "Un temps d'échange, par téléphone ou sur place, permet de se rencontrer, de présenter la maison et de vérifier ensemble que l'accueil correspond à votre situation.", ordre: 2, publishedAt: null },
-  { id: 3, documentId: '3', titre: 'Préparer le séjour', tag: 'à votre rythme', description: "On fixe ensemble les dates et la durée du séjour. On vous explique le fonctionnement de la maison et la vie quotidienne avec les autres.", ordre: 3, publishedAt: null },
-  { id: 4, documentId: '4', titre: 'Le séjour à la maison', tag: 'bienvenue', description: "Vous êtes accueilli pour quelques jours : repos, repas partagés, jardin, balades, moments de calme. Vous participez à la vie commune autant que vous le souhaitez.", ordre: 4, publishedAt: null },
-  { id: 5, documentId: '5', titre: 'Après le séjour', tag: 'on reste en lien', description: "À votre départ, on prend le temps d'un dernier échange. La porte reste ouverte : beaucoup reviennent, notamment lors des Dimanches Ensemble.", ordre: 5, publishedAt: null },
+const SUBNAV = [
+  { id: 'processus', label: 'Processus pour être accueilli' },
+  { id: 'vie-commune', label: "La vie commune à l'Hors du temps" },
+  { id: 'activites', label: 'Activités possibles à St Marcellin' },
 ];
 
+const STRAPIBASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
+
 export default async function EtreAccueilliPage() {
-  let steps: EtapeAccueil[] = STATIC_STEPS;
+  let steps: EtapeAccueil[] = [];
+  let accueilPage: AccueilPage | null = null;
+
   try {
-    const fetched = await getEtapesAccueil();
-    if (fetched.length > 0) steps = fetched;
+    const [fetchedSteps, fetchedAccueilPage] = await Promise.allSettled([
+      getEtapesAccueil(),
+      getAccueilPage(),
+    ]);
+    if (fetchedSteps.status === 'fulfilled') steps = fetchedSteps.value;
+    if (fetchedAccueilPage.status === 'fulfilled') accueilPage = fetchedAccueilPage.value;
   } catch { /* Strapi indisponible */ }
+
+  const vieCommuneImage = accueilPage?.vie_commune_image;
+  const vieCommuneImageUrl = vieCommuneImage
+    ? (vieCommuneImage.url.startsWith('http') ? vieCommuneImage.url : `${STRAPIBASE}${vieCommuneImage.url}`)
+    : null;
 
   return (
     <>
@@ -33,29 +46,20 @@ export default async function EtreAccueilliPage() {
       <PageHero
         scrib="Vous avez besoin de souffler"
         title="Être accueilli"
-        lead="Vous traversez une période difficile et vous avez besoin de faire une halte ? La maison vous est ouverte pour quelques jours, le temps de reprendre pied. Voici comment cela se passe."
+        lead="Vous traversez une période difficile et avez besoin de faire une halte ? Vous pouvez être accueilli à l'Hors du Temps pour une période courte si vous avez un logement (places pour 3 personnes, pour un minimum d'1 semaine) ou longue (places pour 2 personnes, pour un maximum de 6 mois). L'équipe d'accueil se compose en continu de 2 personnes (bénévoles ou salariées), les repas se prennent ensemble, c'est à dire à 7 lorsque nous sommes au complet. Voici comment cela se passe :"
       />
 
-      {/* INTRO — bloc réponse directe (citable LLM) */}
-      <section className="section">
-        <div className="wrap">
-          <div className="prose">
-            <p><strong>L&rsquo;Hors du Temps accueille pour quelques jours</strong> celles et ceux qui ont besoin de se poser : après une épreuve, un deuil, une fatigue profonde, un passage à vide. On y vient pour souffler, retrouver un rythme, du lien, et un peu de confiance.</p>
-            <p>L&rsquo;accueil est <strong>entièrement gratuit</strong>, sans conditions de ressources ni prescription médicale. Il n&rsquo;y a rien à prouver, rien à payer : juste à être là. La maison est un lieu de vie partagé, en lien avec d&rsquo;autres personnes accueillies et avec les bénévoles.</p>
-            <p>Pour venir, il suffit de nous appeler ou de nous écrire. L&rsquo;accueil se fait toujours après un premier échange — pour faire connaissance, présenter la maison, et vérifier ensemble que le séjour vous correspond.</p>
-          </div>
-        </div>
-      </section>
+      <SubNav items={SUBNAV} />
 
       {/* PROCESSUS */}
-      <section className="section section-cream">
+      <section className="section section-cream anchor" id="processus">
         <div className="wrap">
           <div className="section-head">
             <span className="scrib scrib-teal" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Pas à pas</span>
-            <h2>Comment se déroule un accueil</h2>
+            <h2>Processus pour être accueilli</h2>
             <p className="intro">Du premier contact au retour chez soi, chaque étape se fait en douceur, à votre rythme.</p>
           </div>
-          <div className="steps">
+          <div className="steps steps-stack">
             {steps.map((step, i) => (
               <div key={step.id} className="step">
                 <span className="step-tag">{step.tag}</span>
@@ -71,6 +75,51 @@ export default async function EtreAccueilliPage() {
               <p>Le moindre doute, la moindre hésitation ? Écrivez-nous, on vous répond avec plaisir et sans engagement.</p>
               <Link className="btn btn-primary" href="/nous-contacter" style={{ marginTop: 14, alignSelf: 'flex-start' }}>Nous contacter</Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* VIE COMMUNE */}
+      <section className="section anchor" id="vie-commune">
+        <div className="wrap">
+          <div className="section-head">
+            <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Quelques règles</span>
+            <h2>La vie commune à l&rsquo;Hors du temps</h2>
+          </div>
+          <div className="dimanches-block">
+            <div className="prose dimanches-prose">
+              {accueilPage?.vie_commune_texte?.split(/\n\n+/).filter(Boolean).map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+            {vieCommuneImageUrl ? (
+              <div className="flyer-img" style={{ position: 'relative', minHeight: 400 }}>
+                <Image
+                  src={vieCommuneImageUrl}
+                  alt={vieCommuneImage?.alternativeText ?? "Vie commune à l'Hors du Temps"}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            ) : (
+              <div className="flyer-ph">image à fournir</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ACTIVITÉS */}
+      <section className="section section-cream anchor" id="activites">
+        <div className="wrap">
+          <div className="section-head">
+            <span className="scrib scrib-teal" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>À deux pas</span>
+            <h2>Activités possibles à St Marcellin</h2>
+          </div>
+          <div className="prose">
+            {accueilPage?.activites_texte?.split(/\n\n+/).filter(Boolean).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
           </div>
         </div>
       </section>

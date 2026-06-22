@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "parametre",
+  "info": {
+    "singularName": "parametre",
+    "pluralName": "parametres",
+    "displayName": "Paramètres",
+    "description": "Liens éditables : dons, bénévolat, réseaux sociaux"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "don_fonctionnement_url": {
+      "type": "string"
+    },
+    "don_fonds_dotation_url": {
+      "type": "string"
+    },
+    "benevolat_url": {
+      "type": "string"
+    },
+    "facebook_url": {
+      "type": "string"
+    },
+    "mecenat_url": {
+      "type": "string"
+    }
+  }
+}

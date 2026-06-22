@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const model = (body?.model as string | undefined) ?? 'articles';
 
   // Tags correspondent aux clés utilisées dans lib/strapi.ts
-  const ALLOWED_TAGS = ['articles', 'membre-equipes', 'etape-accueils'];
+  const ALLOWED_TAGS = ['articles', 'membre-equipes', 'etape-accueils', 'frise-historiques', 'historique', 'parametre', 'dimanche', 'accueil-page'];
   const tag = ALLOWED_TAGS.includes(model) ? model : 'articles';
 
   revalidateTag(tag);

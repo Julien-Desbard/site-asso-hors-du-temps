@@ -1,17 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getArticles } from '@/lib/strapi';
+import { getArticles, getParametres } from '@/lib/strapi';
 import type { Article } from '@hors-du-temps/types';
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
-
-const STATIC_ARTICLES = [
-  { id: -1, slug: 'fonds-de-dotation', titre: 'Aidez-nous à racheter la maison !', date: '2026-04-29', extrait: "En 2027, la propriété sera mise en vente. Le fonds de dotation « La maison Hors du Temps » est lancé — premier palier déjà franchi.", image_principale: null, a_la_une: true },
-  { id: -2, slug: '#', titre: 'Lettre aux adhérents — Avril 2026', date: '2026-04-29', extrait: "L'aventure continue : une nouvelle équipe prend le relais. Rendez-vous à la prochaine assemblée générale.", image_principale: null, a_la_une: false },
-  { id: -3, slug: '#', titre: "Retour sur l'AG et les Dimanches ensemble", date: '2025-07-16', extrait: "Un repas sous les arbres, un bal folk, des rires partagés — merci à vous tous !", image_principale: null, a_la_une: false },
-] as unknown as Article[];
 
 const PORTES = [
   { href: '/qui-sommes-nous', bg: '#e8e0d0', titre: 'Qui sommes-nous ?', desc: "Notre histoire depuis 2010, l'équipe actuelle, les Dimanches Ensemble et ce qu'on dit de nous.", cta: 'En savoir plus' },
@@ -21,13 +15,19 @@ const PORTES = [
 ];
 
 export default async function HomePage() {
-  let articles: Article[] = STATIC_ARTICLES;
+  let articles: Article[] = [];
+  let donFonctionnementUrl = 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
+
   try {
-    const fetched = await getArticles();
-    if (fetched.length > 0) articles = fetched.slice(0, 3);
-  } catch {
-    // Strapi indisponible — affiche statiques
-  }
+    const [fetchedArticles, fetchedParams] = await Promise.allSettled([
+      getArticles(),
+      getParametres(),
+    ]);
+    if (fetchedArticles.status === 'fulfilled') articles = fetchedArticles.value.slice(0, 3);
+    if (fetchedParams.status === 'fulfilled' && fetchedParams.value?.don_fonctionnement_url) {
+      donFonctionnementUrl = fetchedParams.value.don_fonctionnement_url;
+    }
+  } catch { /* Strapi indisponible */ }
 
   const strapiBase = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
 
@@ -89,46 +89,48 @@ export default async function HomePage() {
       </section>
 
       {/* ACTUALITÉS */}
-      <section className="home-actus">
-        <div className="wrap">
-          <div className="actus-head">
-            <div>
-              <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-2deg)', display: 'inline-block' }}>Côté nouvelles</span>
-              <h2>Les actualités</h2>
+      {articles.length > 0 && (
+        <section className="home-actus">
+          <div className="wrap">
+            <div className="actus-head">
+              <div>
+                <span className="scrib" style={{ fontSize: 30, transform: 'rotate(-2deg)', display: 'inline-block' }}>Côté nouvelles</span>
+                <h2>Les actualités</h2>
+              </div>
+              <Link href="/actualites" className="actus-all">Toutes les actualités →</Link>
             </div>
-            <Link href="/actualites" className="actus-all">Toutes les actualités →</Link>
-          </div>
-          <div className="actus-grid">
-            {articles.map((article, i) => {
-              const img = article.image_principale;
-              const imgUrl = img ? (img.url.startsWith('http') ? img.url : `${strapiBase}${img.url}`) : null;
-              return (
-                <article key={article.id} className={`card ${i === 0 ? 'card-lead' : ''}`}>
-                  {i === 0 && <span className="tape" />}
-                  {imgUrl ? (
-                    <div className="card-img" style={{ position: 'relative' }}>
-                      <Image src={imgUrl} alt={img?.alternativeText ?? article.titre} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
+            <div className="actus-grid">
+              {articles.map((article, i) => {
+                const img = article.image_principale;
+                const imgUrl = img ? (img.url.startsWith('http') ? img.url : `${strapiBase}${img.url}`) : null;
+                return (
+                  <article key={article.id} className={`card ${i === 0 ? 'card-lead' : ''}`}>
+                    {i === 0 && <span className="tape" />}
+                    {imgUrl ? (
+                      <div className="card-img" style={{ position: 'relative' }}>
+                        <Image src={imgUrl} alt={img?.alternativeText ?? article.titre} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
+                      </div>
+                    ) : (
+                      <div className={i === 0 ? 'card-img-ph' : 'card-img-ph-teal'}>visuel à fournir</div>
+                    )}
+                    <div className="card-body">
+                      <div className="card-date">{formatDate(article.date)}</div>
+                      <h3>{article.titre}</h3>
+                      <p>{article.extrait}</p>
+                      <Link className="card-read" href={article.slug.startsWith('/') ? article.slug : `/actualites/${article.slug}`}>
+                        Lire la suite
+                      </Link>
                     </div>
-                  ) : (
-                    <div className={i === 0 ? 'card-img-ph' : 'card-img-ph-teal'}>visuel à fournir</div>
-                  )}
-                  <div className="card-body">
-                    <div className="card-date">{formatDate(article.date)}</div>
-                    <h3>{article.titre}</h3>
-                    <p>{article.extrait}</p>
-                    <Link className="card-read" href={article.slug.startsWith('/') ? article.slug : `/actualites/${article.slug}`}>
-                      Lire la suite
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
+            </div>
+            <div className="actus-cta">
+              <Link href="/actualites" className="btn btn-primary">Voir toutes les actualités →</Link>
+            </div>
           </div>
-          <div className="actus-cta">
-            <Link href="/actualites" className="btn btn-primary">Voir toutes les actualités →</Link>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* PORTES D'ENTRÉE */}
       <section className="home-portes">
@@ -167,7 +169,7 @@ export default async function HomePage() {
               <span className="don-eyebrow">Au quotidien</span>
               <h3>Pour le fonctionnement de l&rsquo;association</h3>
               <p>Pour accompagner les personnes accueillies mais aussi pour les repas, le chauffage ou encore l&rsquo;entretien de la maison. Votre don nous aide à faire vivre l&rsquo;accueil jour après jour.</p>
-              <a className="btn btn-dark" href="https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2" target="_blank" rel="noopener noreferrer">Donner via HelloAsso →</a>
+              <a className="btn btn-dark" href={donFonctionnementUrl} target="_blank" rel="noopener noreferrer">Donner via HelloAsso →</a>
             </div>
             <div className="don-card don-card-dotation">
               <span className="don-badge">Urgence 2027</span>

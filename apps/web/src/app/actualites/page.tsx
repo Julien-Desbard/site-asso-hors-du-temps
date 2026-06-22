@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import Link from 'next/link';
-import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
 import { getArticles } from '@/lib/strapi';
 import type { Article } from '@hors-du-temps/types';
@@ -64,42 +63,15 @@ export default async function ActualitesPage() {
 
       <section className="section">
         <div className="wrap">
-          {articles.length > 0 ? (
+          {articles.length > 0 && (
             <div className="articles-grid">
               {articles.map((article, i) => (
                 <ArticleCard key={article.id} article={article} lead={i === 0} />
               ))}
             </div>
-          ) : (
-            /* Fallback statique si Strapi indisponible */
-            <div className="articles-grid">
-              {[
-                { date: '29 avril 2026', titre: 'Aidez-nous à racheter la maison !', extrait: "En 2027, la propriété sera mise en vente. Le fonds de dotation « La maison Hors du Temps » est lancé pour la racheter — premier palier déjà franchi.", href: '/fonds-de-dotation', lead: true },
-                { date: '29 avril 2026', titre: 'Lettre aux adhérents — Avril 2026', extrait: "L'aventure continue : une nouvelle équipe prend le relais avec enthousiasme. Rendez-vous à la prochaine assemblée générale.", href: '#', lead: false },
-                { date: '16 juillet 2025', titre: "Retour sur l'AG et les Dimanches ensemble", extrait: "Un repas sous les arbres, un bal folk, des rires partagés. Merci à toutes et tous pour ces moments suspendus.", href: '#', lead: false },
-              ].map((a, i) => (
-                <article key={i} className={`card ${a.lead ? 'card-lead' : ''}`}>
-                  {a.lead && <span className="tape" />}
-                  <div className={a.lead ? 'card-img-ph' : 'card-img-ph-teal'}>visuel à fournir</div>
-                  <div className="card-body">
-                    <div className="card-date">{a.date}</div>
-                    <h3>{a.titre}</h3>
-                    <p>{a.extrait}</p>
-                    <Link className="card-read" href={a.href}>Lire la suite</Link>
-                  </div>
-                </article>
-              ))}
-            </div>
           )}
         </div>
       </section>
-
-      <Callout
-        title="Ne rien manquer"
-        text="Suivez la vie de la maison au fil des saisons sur nos réseaux, ou venez nous rencontrer un dimanche."
-        ctaLabel="Rester en lien"
-        ctaHref="/nous-contacter"
-      />
     </>
   );
 }
