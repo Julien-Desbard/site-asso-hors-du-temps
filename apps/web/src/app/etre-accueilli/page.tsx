@@ -22,6 +22,10 @@ const SUBNAV = [
 
 const STRAPIBASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
 
+// Fallback affiché tant que Strapi prod n'est pas branché (mode démo Vercel) : vie_commune_texte et activites_texte viennent uniquement de Strapi, donc vides sans ce texte en dur.
+const FALLBACK_VIE_COMMUNE = "Les repas de midi et du soir se prennent ensemble. Le petit déjeuner est en libre-service. Une participation à la réalisation des repas, à la vaisselle ou au nettoyage est demandée. Chaque personne accueillie est invitée à participer selon ses aptitudes et possibilités, à la vie de la maison, environ 2h par jour.\n\nFrais de séjour : un forfait de 10 euros/jour est payable par quinzaine. Vous aurez une chambre individuelle avec cabinet de toilette (WC et douche). Il appartient au résident d'en faire le ménage. Il est possible de participer à de petits travaux d'entretien de la maison ou du jardin si vous le souhaitez, à voir avec les responsables de maison.\n\nEn fonction de votre situation, les démarches administratives, de santé… peuvent se poursuivre pendant votre séjour. L'équipe d'accueil de l'Hors du temps fait en sorte de vous soutenir (sans se substituer aux professionnels déjà engagés auprès de vous). Nous sommes à l'écoute des personnes, de leur bien-être mais nous les laissons avancer à leur rythme, sans poser de questions. Les personnes accueillies font les démarches qu'elles jugent nécessaires en dehors de la maison. Les services sociaux ou médicaux de St Marcellin peuvent prendre le relais si nécessaire.";
+const FALLBACK_ACTIVITES = "Texte à venir.";
+
 export default async function EtreAccueilliPage() {
   let steps: EtapeAccueil[] = [];
   let accueilPage: AccueilPage | null = null;
@@ -88,7 +92,7 @@ export default async function EtreAccueilliPage() {
           </div>
           <div className="dimanches-block">
             <div className="prose dimanches-prose">
-              {accueilPage?.vie_commune_texte?.split(/\n\n+/).filter(Boolean).map((para, i) => (
+              {(accueilPage?.vie_commune_texte ?? FALLBACK_VIE_COMMUNE).split(/\n\n+/).filter(Boolean).map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
@@ -117,7 +121,7 @@ export default async function EtreAccueilliPage() {
             <h2>Activités possibles à St Marcellin</h2>
           </div>
           <div className="prose">
-            {accueilPage?.activites_texte?.split(/\n\n+/).filter(Boolean).map((para, i) => (
+            {(accueilPage?.activites_texte ?? FALLBACK_ACTIVITES).split(/\n\n+/).filter(Boolean).map((para, i) => (
               <p key={i}>{para}</p>
             ))}
           </div>
