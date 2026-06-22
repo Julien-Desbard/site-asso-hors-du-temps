@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getArticles, getParametres } from '@/lib/strapi';
+import { FALLBACK_ARTICLES, getArticles, getParametres } from '@/lib/strapi';
 import type { Article } from '@hors-du-temps/types';
 
 function formatDate(iso: string) {
@@ -15,7 +15,7 @@ const PORTES = [
 ];
 
 export default async function HomePage() {
-  let articles: Article[] = [];
+  let articles: Article[] = FALLBACK_ARTICLES.slice(0, 3);
   let donFonctionnementUrl = 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
 
   try {

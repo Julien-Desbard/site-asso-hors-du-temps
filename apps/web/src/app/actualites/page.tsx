@@ -3,7 +3,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
-import { getArticles } from '@/lib/strapi';
+import { FALLBACK_ARTICLES, getArticles } from '@/lib/strapi';
 import type { Article } from '@hors-du-temps/types';
 
 export const metadata: Metadata = {
@@ -45,11 +45,11 @@ function ArticleCard({ article, lead = false }: { article: Article; lead?: boole
 }
 
 export default async function ActualitesPage() {
-  let articles: Article[] = [];
+  let articles: Article[] = FALLBACK_ARTICLES;
   try {
     articles = await getArticles();
   } catch {
-    // Strapi indisponible en build statique — affiche placeholder
+    // Strapi indisponible en build statique — garde le fallback
   }
 
   return (

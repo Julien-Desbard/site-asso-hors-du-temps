@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
-import { getArticleBySlug, getArticles } from '@/lib/strapi';
+import { FALLBACK_ARTICLES, getArticleBySlug, getArticles } from '@/lib/strapi';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -14,7 +14,8 @@ export async function generateStaticParams() {
     const articles = await getArticles();
     return articles.map((a) => ({ slug: a.slug }));
   } catch {
-    return [];
+    // Strapi indisponible au build — génère au moins les pages des articles de fallback
+    return FALLBACK_ARTICLES.map((a) => ({ slug: a.slug }));
   }
 }
 
@@ -45,7 +46,8 @@ export default async function ArticlePage({ params }: Props) {
   try {
     article = await getArticleBySlug(slug);
   } catch {
-    // Strapi indisponible
+    // Strapi indisponible — retombe sur l'article de fallback correspondant, s'il existe
+    article = FALLBACK_ARTICLES.find((a) => a.slug === slug) ?? null;
   }
 
   if (!article) notFound();
