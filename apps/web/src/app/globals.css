@@ -441,7 +441,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 
 /* home actus */
 .home-actus { padding: 80px 0 90px; background: var(--cream); }
-.actus-head { margin-bottom: 46px; display: flex; justify-content: space-between; align-items: end; gap: 20px; }
+.actus-head { margin-bottom: 46px; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
 .actus-head h2 { font-family: var(--font-serif); font-size: 56px; font-weight: 500; line-height: 1; }
 .actus-all { font-family: var(--font-hand); font-size: 26px; color: var(--teal-deep); white-space: nowrap; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 .actus-all:hover { color: var(--teal); }

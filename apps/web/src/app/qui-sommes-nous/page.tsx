@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
-import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
 import { getDimanches, getFriseHistorique, getHistorique, getMembresEquipe } from '@/lib/strapi';
