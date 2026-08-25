@@ -3,8 +3,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
-import { getDimanches, getFriseHistorique, getHistorique, getMembresEquipe } from '@/lib/strapi';
-import type { FriseHistorique, MembreEquipe } from '@hors-du-temps/types';
+import { getDimanches, getFriseHistorique, getHistorique, getMembresEquipe } from '@/lib/payload';
 
 export const metadata: Metadata = {
   title: "Qui sommes-nous ? — L'Hors du Temps",
@@ -26,84 +25,19 @@ const PRESSE_LINKS: { year: string; title: string; source: string; href: string 
 // Ne pas ajouter d'entrées fictives ici — la section est masquée si tous les href sont '#'
 const RAPPORTS: { year: string; title: string; note: string; href: string }[] = [];
 
-const STRAPIBASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
-
-// Fallback affiché si Strapi est inatteignable (mode démo Vercel ou panne) : reprend le texte de seed du CMS (apps/cms/src/index.ts).
-const FALLBACK_RECIT = `L'Hors du temps a été créé sur une idée de Carole, qui a connu bien des galères, la précarité et a souhaité, avec son mari Bernard, trouver un lieu d'accueil pour que des personnes en difficulté de toutes sortes puissent se poser et qu'on "leur fiche la paix !", sans qu'on leur demande de s'inscrire dans un programme quelconque.
-
-Séduit par ce projet, un propriétaire a proposé de louer sa grande maison pour un bail de très longue durée, située sur les côteaux de Saint-Marcellin, petite ville en Isère. La maison se situe à mi-chemin entre Grenoble et Valence dans la vallée du Sud-Grésivaudan, au pied des montagnes du Vercors.
-
-Durant des années, Carole et Bernard ont accueilli de nombreuses personnes qui ont passé un temps plus ou moins long avec eux avant de reprendre leur route, de retrouver leur chemin...
-
-Au décès de Carole, un autre couple est venu s'installer dans la maison de l'Hors du temps pour poursuivre ce généreux projet. Christine et Jean-Luc ont accueilli un grand nombre de personnes avec l'aide de salariés et de bénévoles pendant près de 5 ans. Ce sont maintenant Régine et Christian qui ont repris le flambeau courant 2026.`;
-
-const FALLBACK_FRISE: FriseHistorique[] = [
-  { id: -1, documentId: 'fallback-1', annee: '2010', evenement: 'Fondation par Carole et Bernard', ordre: 1, publishedAt: null },
-  { id: -2, documentId: 'fallback-2', annee: '2015', evenement: 'Équipe de bénévoles réguliers constituée', ordre: 2, publishedAt: null },
-  { id: -3, documentId: 'fallback-3', annee: '2019', evenement: 'Lancement des Dimanches Ensemble', ordre: 3, publishedAt: null },
-  { id: -4, documentId: 'fallback-4', annee: '2024', evenement: 'Nouveau rythme : un dimanche sur trois', ordre: 4, publishedAt: null },
-  { id: -5, documentId: 'fallback-5', annee: '2026', evenement: 'Création du fonds de dotation & nouvelle équipe accueillante', ordre: 5, publishedAt: null },
-  { id: -6, documentId: 'fallback-6', annee: '2027', evenement: 'Objectif : rachat de la maison', ordre: 6, publishedAt: null },
-];
-
-const FALLBACK_MEMBRES: MembreEquipe[] = [
-  {
-    id: -1,
-    documentId: 'fallback-1',
-    prenom: 'Marie',
-    role: 'Accueillante principale',
-    presentation: "C'est une rencontre lors d'un dimanche ensemble qui l'a amenée à rejoindre l'association. Elle coordonne les séjours et veille à ce que chacun trouve sa place à la maison.",
-    photo: null,
-    ordre: 1,
-    publishedAt: null,
-  },
-  {
-    id: -2,
-    documentId: 'fallback-2',
-    prenom: 'Jean-Pierre',
-    role: 'Jardinier bénévole',
-    presentation: 'Retraité passionné de jardinage, il entretient le potager et les espaces verts. Le jardin est pour lui un lieu de transmission et de partage silencieux.',
-    photo: null,
-    ordre: 2,
-    publishedAt: null,
-  },
-  {
-    id: -3,
-    documentId: 'fallback-3',
-    prenom: 'Sylvie',
-    role: 'Bénévole cuisine et animation',
-    presentation: 'Cuisinière du cœur, elle prépare les repas partagés et anime les Dimanches Ensemble avec une énergie contagieuse.',
-    photo: null,
-    ordre: 3,
-    publishedAt: null,
-  },
-];
-
 export default async function QuiSommesNousPage() {
-  let membres: MembreEquipe[] = FALLBACK_MEMBRES;
-  let recitParagraphes: string[] = FALLBACK_RECIT.split(/\n\n+/).filter(Boolean);
-  let frise: FriseHistorique[] = FALLBACK_FRISE;
-  let flyerUrl: string | null = null;
-  let flyerAlt: string | null = null;
+  const [membres, historique, frise, dimanche] = await Promise.all([
+    getMembresEquipe(),
+    getHistorique(),
+    getFriseHistorique(),
+    getDimanches(),
+  ]);
 
-  try {
-    const [fetchedMembres, fetchedHistorique, fetchedFrise, fetchedDimanche] = await Promise.allSettled([
-      getMembresEquipe(),
-      getHistorique(),
-      getFriseHistorique(),
-      getDimanches(),
-    ]);
-    if (fetchedMembres.status === 'fulfilled') membres = fetchedMembres.value;
-    if (fetchedHistorique.status === 'fulfilled') {
-      recitParagraphes = fetchedHistorique.value?.recit ? fetchedHistorique.value.recit.split(/\n\n+/).filter(Boolean) : [];
-    }
-    if (fetchedFrise.status === 'fulfilled') frise = fetchedFrise.value;
-    if (fetchedDimanche.status === 'fulfilled' && fetchedDimanche.value?.flyer) {
-      const flyer = fetchedDimanche.value.flyer;
-      flyerUrl = flyer.url.startsWith('http') ? flyer.url : `${STRAPIBASE}${flyer.url}`;
-      flyerAlt = flyer.alternativeText ?? 'Flyer Dimanches Ensemble';
-    }
-  } catch { /* Strapi indisponible */ }
+  const recitParagraphes = historique?.recit ? historique.recit.split(/\n\n+/).filter(Boolean) : [];
+
+  const flyer = typeof dimanche?.flyer === 'object' ? dimanche.flyer : null;
+  const flyerUrl = flyer?.url ?? null;
+  const flyerAlt = flyer?.alt ?? 'Flyer Dimanches Ensemble';
 
   return (
     <>
@@ -153,13 +87,13 @@ export default async function QuiSommesNousPage() {
             </div>
             <div className="team-grid">
               {membres.map((m) => {
-                const photo = m.photo;
-                const photoUrl = photo ? (photo.url.startsWith('http') ? photo.url : `${STRAPIBASE}${photo.url}`) : null;
+                const photo = typeof m.photo === 'object' ? m.photo : null;
+                const photoUrl = photo?.url ?? null;
                 return (
                   <article key={m.id} className="member">
                     <div className="member-photo">
                       {photoUrl ? (
-                        <Image src={photoUrl} alt={photo?.alternativeText ?? m.prenom} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 33vw" />
+                        <Image src={photoUrl} alt={photo?.alt ?? m.prenom} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 33vw" />
                       ) : (
                         'photo (avec accord) · 4:5'
                       )}

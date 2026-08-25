@@ -3,34 +3,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
-import { FALLBACK_ARTICLES, getArticleBySlug, getArticles } from '@/lib/strapi';
+import { getArticleBySlug, getArticles } from '@/lib/payload';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  try {
-    const articles = await getArticles();
-    return articles.map((a) => ({ slug: a.slug }));
-  } catch {
-    // Strapi indisponible au build — génère au moins les pages des articles de fallback
-    return FALLBACK_ARTICLES.map((a) => ({ slug: a.slug }));
-  }
+  const articles = await getArticles();
+  return articles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  try {
-    const article = await getArticleBySlug(slug);
-    if (!article) return {};
-    return {
-      title: `${article.titre} — L'Hors du Temps`,
-      description: article.extrait,
-    };
-  } catch {
-    return {};
-  }
+  const article = await getArticleBySlug(slug);
+  if (!article) return {};
+  return {
+    title: `${article.titre} — L'Hors du Temps`,
+    description: article.extrait,
+  };
 }
 
 function formatDate(iso: string) {
@@ -42,19 +33,12 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
 
-  let article = null;
-  try {
-    article = await getArticleBySlug(slug);
-  } catch {
-    // Strapi indisponible — retombe sur l'article de fallback correspondant, s'il existe
-    article = FALLBACK_ARTICLES.find((a) => a.slug === slug) ?? null;
-  }
+  const article = await getArticleBySlug(slug);
 
   if (!article) notFound();
 
-  const strapiBase = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
-  const img = article.image_principale;
-  const imgUrl = img ? (img.url.startsWith('http') ? img.url : `${strapiBase}${img.url}`) : null;
+  const img = typeof article.image_principale === 'object' ? article.image_principale : null;
+  const imgUrl = img?.url ?? null;
   const canonicalUrl = `${BASE}/actualites/${article.slug}`;
 
   const articleSchema = {
@@ -113,7 +97,7 @@ export default async function ArticlePage({ params }: Props) {
               <div style={{ position: 'relative', height: 420, marginBottom: 40, borderRadius: 4, overflow: 'hidden' }}>
                 <Image
                   src={imgUrl}
-                  alt={img?.alternativeText ?? article.titre}
+                  alt={img?.alt ?? article.titre}
                   fill
                   style={{ objectFit: 'cover' }}
                   priority

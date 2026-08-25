@@ -1,17 +1,10 @@
 import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import { getParametres } from '@/lib/strapi';
+import { getParametres } from '@/lib/payload';
 import './globals.css';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
-
-// Fallback si Strapi est inatteignable (mode démo Vercel ou panne) : reprend le seed du CMS (apps/cms/src/index.ts).
-const FALLBACK_SAME_AS = [
-  'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2',
-  'https://www.jeveuxaider.gouv.fr/organisations/18543-ensemble-pour-l-hors-du-temps',
-  'https://www.facebook.com/people/Association-lHors-du-temps/61583118786303/',
-];
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
@@ -45,17 +38,12 @@ const websiteSchema = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  let sameAs: string[] = FALLBACK_SAME_AS;
-  try {
-    const params = await getParametres();
-    if (params) {
-      sameAs = [
-        params.don_fonctionnement_url,
-        params.benevolat_url,
-        params.facebook_url,
-      ].filter((url): url is string => Boolean(url));
-    }
-  } catch { /* Strapi indisponible */ }
+  const params = await getParametres();
+  const sameAs = [
+    params?.don_fonctionnement_url,
+    params?.benevolat_url,
+    params?.facebook_url,
+  ].filter((url): url is string => Boolean(url));
 
   const organizationSchema = {
     '@context': 'https://schema.org',
@@ -95,8 +83,6 @@ export default async function RootLayout({
   return (
     <html lang="fr">
       <head>
-        <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

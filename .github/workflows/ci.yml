@@ -102,6 +102,24 @@ jobs:
     name: Build (web)
     needs: [typecheck, lint, test]
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: payload
+          POSTGRES_DB: payload
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://payload:payload@localhost:5432/payload
+      PAYLOAD_SECRET: test-secret-for-ci-do-not-use-in-prod
+      BLOB_READ_WRITE_TOKEN: vercel_blob_rw_citeststoreid123_abcdef1234567890abcdef1234567890
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -112,12 +130,32 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Migrer et seeder Payload (base CI éphémère)
+        run: pnpm --filter @hors-du-temps/web run ci:setup-db
       - run: pnpm --filter @hors-du-temps/web build
 
   e2e:
     name: E2E Playwright (chromium)
     needs: install
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: payload
+          POSTGRES_DB: payload
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://payload:payload@localhost:5432/payload
+      PAYLOAD_SECRET: test-secret-for-ci-do-not-use-in-prod
+      BLOB_READ_WRITE_TOKEN: vercel_blob_rw_citeststoreid123_abcdef1234567890abcdef1234567890
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -128,6 +166,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Migrer et seeder Payload (base CI éphémère)
+        run: pnpm --filter @hors-du-temps/web run ci:setup-db
       - name: Install Playwright browsers
         run: pnpm --filter @hors-du-temps/web exec playwright install --with-deps chromium
       - name: Run E2E tests

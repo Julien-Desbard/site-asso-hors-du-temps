@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import PageHero from '@/components/PageHero';
-import { getParametres } from '@/lib/strapi';
+import { getParametres } from '@/lib/payload';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
 const FALLBACK_DON_URL = 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
@@ -13,11 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function FondsDeDotationPage() {
-  let donUrl = FALLBACK_DON_URL;
-  try {
-    const params = await getParametres();
-    if (params?.don_fonds_dotation_url) donUrl = params.don_fonds_dotation_url;
-  } catch { /* Strapi indisponible */ }
+  const params = await getParametres();
+  const donUrl = params?.don_fonds_dotation_url ?? FALLBACK_DON_URL;
 
   const donateSchema = {
     '@context': 'https://schema.org',

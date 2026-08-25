@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Callout from '@/components/Callout';
 import PageHero from '@/components/PageHero';
-import { getParametres } from '@/lib/strapi';
-import type { Parametre } from '@hors-du-temps/types';
+import { getParametres } from '@/lib/payload';
 
 export const metadata: Metadata = {
   title: "Bénévolat — L'Hors du Temps",
@@ -12,10 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BenevolatPage() {
-  let parametre: Parametre | null = null;
-  try {
-    parametre = await getParametres();
-  } catch { /* Strapi indisponible */ }
+  const parametre = await getParametres();
 
   return (
     <>

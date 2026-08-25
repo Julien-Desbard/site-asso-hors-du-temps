@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getArticles } from '@/lib/strapi';
+import { getArticles } from '@/lib/payload';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
 
@@ -14,16 +14,13 @@ const STATIC_ROUTES = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  let articleRoutes: MetadataRoute.Sitemap = [];
-  try {
-    const articles = await getArticles();
-    articleRoutes = articles.map((a) => ({
-      url: `${BASE}/actualites/${a.slug}`,
-      lastModified: new Date(a.updatedAt),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }));
-  } catch { /* Strapi indisponible */ }
+  const articles = await getArticles();
+  const articleRoutes: MetadataRoute.Sitemap = articles.map((a) => ({
+    url: `${BASE}/actualites/${a.slug}`,
+    lastModified: new Date(a.updatedAt),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
 
   return [...STATIC_ROUTES, ...articleRoutes];
 }

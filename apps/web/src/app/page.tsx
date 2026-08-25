@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FALLBACK_ARTICLES, getArticles, getParametres } from '@/lib/strapi';
-import type { Article } from '@hors-du-temps/types';
+import { getArticles, getParametres } from '@/lib/payload';
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -15,21 +14,9 @@ const PORTES = [
 ];
 
 export default async function HomePage() {
-  let articles: Article[] = FALLBACK_ARTICLES.slice(0, 3);
-  let donFonctionnementUrl = 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
-
-  try {
-    const [fetchedArticles, fetchedParams] = await Promise.allSettled([
-      getArticles(),
-      getParametres(),
-    ]);
-    if (fetchedArticles.status === 'fulfilled') articles = fetchedArticles.value.slice(0, 3);
-    if (fetchedParams.status === 'fulfilled' && fetchedParams.value?.don_fonctionnement_url) {
-      donFonctionnementUrl = fetchedParams.value.don_fonctionnement_url;
-    }
-  } catch { /* Strapi indisponible */ }
-
-  const strapiBase = process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
+  const [allArticles, parametres] = await Promise.all([getArticles(), getParametres()]);
+  const articles = allArticles.slice(0, 3);
+  const donFonctionnementUrl = parametres?.don_fonctionnement_url ?? 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
 
   return (
     <>
@@ -101,14 +88,14 @@ export default async function HomePage() {
             </div>
             <div className="actus-grid">
               {articles.map((article, i) => {
-                const img = article.image_principale;
-                const imgUrl = img ? (img.url.startsWith('http') ? img.url : `${strapiBase}${img.url}`) : null;
+                const img = typeof article.image_principale === 'object' ? article.image_principale : null;
+                const imgUrl = img?.url ?? null;
                 return (
                   <article key={article.id} className={`card ${i === 0 ? 'card-lead' : ''}`}>
                     {i === 0 && <span className="tape" />}
                     {imgUrl ? (
                       <div className="card-img" style={{ position: 'relative' }}>
-                        <Image src={imgUrl} alt={img?.alternativeText ?? article.titre} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
+                        <Image src={imgUrl} alt={img?.alt ?? article.titre} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
                       </div>
                     ) : (
                       <div className={i === 0 ? 'card-img-ph' : 'card-img-ph-teal'}>visuel à fournir</div>
