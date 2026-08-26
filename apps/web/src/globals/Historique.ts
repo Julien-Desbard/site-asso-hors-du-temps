@@ -13,6 +13,7 @@ export const Historique: GlobalConfig = {
     {
       name: 'recit',
       type: 'textarea',
+      label: 'Récit',
       required: true,
     },
   ],

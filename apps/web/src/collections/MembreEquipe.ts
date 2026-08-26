@@ -3,6 +3,10 @@ import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks
 
 export const MembreEquipe: CollectionConfig = {
   slug: 'membre-equipe',
+  labels: {
+    singular: "Membre de l'équipe",
+    plural: "Membres de l'équipe",
+  },
   admin: {
     useAsTitle: 'prenom',
   },
@@ -17,16 +21,19 @@ export const MembreEquipe: CollectionConfig = {
     {
       name: 'prenom',
       type: 'text',
+      label: 'Prénom',
       required: true,
     },
     {
       name: 'role',
       type: 'text',
+      label: 'Rôle',
       required: true,
     },
     {
       name: 'presentation',
       type: 'textarea',
+      label: 'Présentation',
       required: true,
     },
     {

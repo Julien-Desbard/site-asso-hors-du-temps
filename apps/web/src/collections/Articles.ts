@@ -59,6 +59,7 @@ export const Articles: CollectionConfig = {
     {
       name: 'a_la_une',
       type: 'checkbox',
+      label: 'À la une',
       defaultValue: false,
     },
   ],

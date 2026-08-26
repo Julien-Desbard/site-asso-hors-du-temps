@@ -1,6 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { buildConfig } from 'payload';
+import { fr } from '@payloadcms/translations/languages/fr';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
@@ -21,6 +22,10 @@ export default buildConfig({
   collections: [Media, Articles, MembreEquipe, EtapeAccueil, FriseHistorique],
   globals: [Historique, Parametre, AccueilPage, Dimanche],
   editor: lexicalEditor(),
+  i18n: {
+    supportedLanguages: { fr },
+    fallbackLanguage: 'fr',
+  },
   secret: process.env.PAYLOAD_SECRET as string,
   db: postgresAdapter({
     pool: {

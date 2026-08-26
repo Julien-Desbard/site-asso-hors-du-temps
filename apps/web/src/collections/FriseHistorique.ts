@@ -17,11 +17,13 @@ export const FriseHistorique: CollectionConfig = {
     {
       name: 'annee',
       type: 'text',
+      label: 'Année',
       required: true,
     },
     {
       name: 'evenement',
       type: 'text',
+      label: 'Événement',
       required: true,
     },
     {

@@ -3,6 +3,10 @@ import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks
 
 export const EtapeAccueil: CollectionConfig = {
   slug: 'etape-accueil',
+  labels: {
+    singular: "Étape d'accueil",
+    plural: "Étapes d'accueil",
+  },
   admin: {
     useAsTitle: 'titre',
   },
