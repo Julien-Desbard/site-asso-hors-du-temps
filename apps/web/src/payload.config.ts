@@ -5,6 +5,7 @@ import { fr } from '@payloadcms/translations/languages/fr';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
+import { Users } from './collections/Users.ts';
 import { Media } from './collections/Media.ts';
 import { Articles } from './collections/Articles.ts';
 import { MembreEquipe } from './collections/MembreEquipe.ts';
@@ -19,7 +20,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
-  collections: [Media, Articles, MembreEquipe, EtapeAccueil, FriseHistorique],
+  collections: [Users, Media, Articles, MembreEquipe, EtapeAccueil, FriseHistorique],
   globals: [Historique, Parametre, AccueilPage, Dimanche],
   editor: lexicalEditor(),
   i18n: {
