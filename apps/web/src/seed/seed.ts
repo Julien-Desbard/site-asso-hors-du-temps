@@ -1,7 +1,7 @@
 import { getPayload } from 'payload';
 import config from '../payload.config.ts';
 
-// Contenu copié verbatim depuis apps/cms/src/index.ts (seed Strapi).
+// Contenu copié verbatim depuis l'ancien seed Strapi (apps/cms/, supprimé au cutover Payload).
 const seedData = {
   historique: {
     recit: `L'Hors du temps a été créé sur une idée de Carole, qui a connu bien des galères, la précarité et a souhaité, avec son mari Bernard, trouver un lieu d'accueil pour que des personnes en difficulté de toutes sortes puissent se poser et qu'on "leur fiche la paix !", sans qu'on leur demande de s'inscrire dans un programme quelconque.
