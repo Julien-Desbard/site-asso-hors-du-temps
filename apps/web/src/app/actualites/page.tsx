@@ -3,8 +3,8 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
-import { FALLBACK_ARTICLES, getArticles } from '@/lib/strapi';
-import type { Article } from '@hors-du-temps/types';
+import { getArticles } from '@/lib/payload';
+import type { Article } from '@/payload-types';
 
 export const metadata: Metadata = {
   title: "Actualités — L'Hors du Temps",
@@ -17,15 +17,15 @@ function formatDate(iso: string) {
 }
 
 function ArticleCard({ article, lead = false }: { article: Article; lead?: boolean }) {
-  const img = article.image_principale;
+  const img = typeof article.image_principale === 'object' ? article.image_principale : null;
   return (
     <article className={`card ${lead ? 'card-lead' : ''}`}>
       {lead && <span className="tape" />}
-      {img ? (
+      {img?.url ? (
         <div className="card-img">
           <Image
-            src={img.url.startsWith('http') ? img.url : `${process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337'}${img.url}`}
-            alt={img.alternativeText ?? article.titre}
+            src={img.url}
+            alt={img.alt ?? article.titre}
             fill
             style={{ objectFit: 'cover' }}
             sizes="(max-width: 768px) 100vw, 33vw"
@@ -45,12 +45,7 @@ function ArticleCard({ article, lead = false }: { article: Article; lead?: boole
 }
 
 export default async function ActualitesPage() {
-  let articles: Article[] = FALLBACK_ARTICLES;
-  try {
-    articles = await getArticles();
-  } catch {
-    // Strapi indisponible en build statique — garde le fallback
-  }
+  const articles: Article[] = await getArticles();
 
   return (
     <>
