@@ -7,6 +7,7 @@ const validData: ContactFormData = {
   nom: 'Dupont',
   email: 'marie@example.com',
   message: 'Bonjour, je souhaite en savoir plus sur votre association.',
+  startedAt: Date.now() - 5000,
 };
 
 describe('sendContact — validation Zod', () => {
@@ -32,6 +33,18 @@ describe('sendContact — validation Zod', () => {
     const result = await sendContact({ ...validData, message: 'Court' });
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error).toContain('Message trop court');
+  });
+});
+
+describe('sendContact — anti-abus', () => {
+  it('honeypot rempli : succès silencieux, aucun envoi', async () => {
+    const result = await sendContact({ ...validData, site_web: 'https://spam.example' });
+    expect(result.ok).toBe(true);
+  });
+
+  it('soumission trop rapide (< 2s) : succès silencieux, aucun envoi', async () => {
+    const result = await sendContact({ ...validData, startedAt: Date.now() });
+    expect(result.ok).toBe(true);
   });
 });
 
