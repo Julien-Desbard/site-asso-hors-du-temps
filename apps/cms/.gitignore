@@ -1,6 +1,0 @@
-.env
-.tmp/
-*.db
-dist/
-build/
-node_modules/
