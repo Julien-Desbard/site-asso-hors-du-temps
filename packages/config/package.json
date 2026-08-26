@@ -1,6 +1,0 @@
-{
-  "name": "@hors-du-temps/config",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./index.js"
-}
