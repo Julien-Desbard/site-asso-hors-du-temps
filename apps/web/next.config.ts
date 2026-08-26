@@ -27,7 +27,10 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "img-src 'self' https://*.public.blob.vercel-storage.com data:",
-              "script-src 'self' 'unsafe-inline'",
+              // 'unsafe-eval' requis uniquement en dev : le runtime HMR de
+              // `next dev` exécute ses modules via eval() (devtool eval-source-map).
+              // Absent en prod, où le bundle ne l'utilise pas.
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
               "style-src 'self' 'unsafe-inline'",
               "connect-src 'self' https://*.sentry.io",
               "frame-ancestors 'none'",
