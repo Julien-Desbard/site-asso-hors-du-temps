@@ -1,5 +1,13 @@
 .form { display: flex; flex-direction: column; gap: 0; }
 
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;

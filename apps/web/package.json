@@ -14,7 +14,7 @@
     "test:e2e": "playwright test",
     "payload": "payload --use-swc",
     "generate:importmap": "payload generate:importmap --use-swc",
-    "generate:types": "payload generate:types --use-swc",
+    "generate:types": "node scripts/generate-types.mjs",
     "migrate": "node scripts/migrate.mjs",
     "ci:setup-db": "node scripts/migrate.mjs --seed"
   },

@@ -4,6 +4,10 @@ import { revalidateGlobalChange } from '../hooks/revalidate.ts';
 export const AccueilPage: GlobalConfig = {
   slug: 'accueil-page',
   label: "Page d'accueil",
+  access: {
+    read: () => true,
+    update: ({ req: { user } }) => Boolean(user),
+  },
   hooks: {
     afterChange: [revalidateGlobalChange('accueil-page')],
   },

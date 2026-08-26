@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -14,6 +14,8 @@ const schema = z.object({
   tel: z.string().optional(),
   sujet: z.string().optional(),
   message: z.string().min(10, 'Message trop court (10 caractères min.)'),
+  // Honeypot anti-bot : champ caché, doit rester vide.
+  site_web: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -21,6 +23,7 @@ type FormData = z.infer<typeof schema>;
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
   const [serverError, setServerError] = useState('');
+  const startedAtRef = useRef(Date.now());
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -28,7 +31,7 @@ export default function ContactForm() {
 
   const onSubmit = async (data: FormData) => {
     setServerError('');
-    const result = await sendContact(data);
+    const result = await sendContact({ ...data, startedAt: startedAtRef.current });
     if (result.ok) {
       setSent(true);
     } else {
@@ -48,6 +51,11 @@ export default function ContactForm() {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+      <div className={styles.honeypot} aria-hidden="true">
+        <label htmlFor="site_web">Site web</label>
+        <input id="site_web" type="text" tabIndex={-1} autoComplete="off" {...register('site_web')} />
+      </div>
+
       <div className={styles.row}>
         <div className={styles.field}>
           <label htmlFor="prenom">Prénom *</label>

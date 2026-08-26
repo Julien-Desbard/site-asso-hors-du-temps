@@ -4,6 +4,10 @@ import { revalidateGlobalChange } from '../hooks/revalidate.ts';
 export const Parametre: GlobalConfig = {
   slug: 'parametre',
   label: 'Paramètres',
+  access: {
+    read: () => true,
+    update: ({ req: { user } }) => Boolean(user),
+  },
   hooks: {
     afterChange: [revalidateGlobalChange('parametre')],
   },

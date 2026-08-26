@@ -25,12 +25,6 @@
       "sharp",
       "unrs-resolver"
     ],
-    "auditConfig": {
-      "ignoreCves": [
-        "CVE-2025-14505",
-        "CVE-2026-8769"
-      ]
-    },
     "packageExtensions": {
       "@hookform/resolvers": {
         "peerDependencies": {
