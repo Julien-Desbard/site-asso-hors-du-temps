@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { generateSlug } from '../hooks/generateSlug.ts';
 import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks/revalidate.ts';
 
 export const Articles: CollectionConfig = {
@@ -25,6 +26,12 @@ export const Articles: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
+      admin: {
+        hidden: true,
+      },
+      hooks: {
+        beforeValidate: [generateSlug],
+      },
     },
     {
       name: 'date',
