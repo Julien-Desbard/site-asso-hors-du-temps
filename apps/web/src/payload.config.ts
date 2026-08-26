@@ -30,6 +30,9 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL as string,
+      ssl: process.env.DATABASE_URL?.includes('localhost')
+        ? false
+        : { rejectUnauthorized: true },
     },
     // Postgres en prod exige des migrations explicites (`payload migrate`) ;
     // le mode "push" (auto-sync du schéma) n'est utilisable qu'en dev.
