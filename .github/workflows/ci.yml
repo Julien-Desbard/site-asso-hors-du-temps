@@ -113,7 +113,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://payload:payload@localhost:5432/payload
       PAYLOAD_SECRET: test-secret-for-ci-do-not-use-in-prod
-      BLOB_READ_WRITE_TOKEN: not-a-real-token-for-ci-only
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.CI_BLOB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -149,7 +149,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://payload:payload@localhost:5432/payload
       PAYLOAD_SECRET: test-secret-for-ci-do-not-use-in-prod
-      BLOB_READ_WRITE_TOKEN: vercel_blob_rw_citeststoreid123_abcdef1234567890abcdef1234567890
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.CI_BLOB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
