@@ -16,7 +16,7 @@ export const Media: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   upload: {
-    mimeTypes: ['image/*'],
+    mimeTypes: ['image/*', 'application/pdf'],
   },
   fields: [
     {

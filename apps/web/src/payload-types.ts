@@ -73,6 +73,8 @@ export interface Config {
     'membre-equipe': MembreEquipe;
     'etape-accueil': EtapeAccueil;
     'frise-historique': FriseHistorique;
+    'article-presse': ArticlePresse;
+    'rapport-activite': RapportActivite;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +88,8 @@ export interface Config {
     'membre-equipe': MembreEquipeSelect<false> | MembreEquipeSelect<true>;
     'etape-accueil': EtapeAccueilSelect<false> | EtapeAccueilSelect<true>;
     'frise-historique': FriseHistoriqueSelect<false> | FriseHistoriqueSelect<true>;
+    'article-presse': ArticlePresseSelect<false> | ArticlePresseSelect<true>;
+    'rapport-activite': RapportActiviteSelect<false> | RapportActiviteSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -100,12 +104,14 @@ export interface Config {
     parametre: Parametre;
     'accueil-page': AccueilPage;
     dimanche: Dimanche;
+    'benevolat-page': BenevolatPage;
   };
   globalsSelect: {
     historique: HistoriqueSelect<false> | HistoriqueSelect<true>;
     parametre: ParametreSelect<false> | ParametreSelect<true>;
     'accueil-page': AccueilPageSelect<false> | AccueilPageSelect<true>;
     dimanche: DimancheSelect<false> | DimancheSelect<true>;
+    'benevolat-page': BenevolatPageSelect<false> | BenevolatPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -256,6 +262,36 @@ export interface FriseHistorique {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "article-presse".
+ */
+export interface ArticlePresse {
+  id: number;
+  titre: string;
+  source: string;
+  annee: string;
+  lien: string;
+  ordre?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rapport-activite".
+ */
+export interface RapportActivite {
+  id: number;
+  annee: string;
+  titre: string;
+  note?: string | null;
+  fichier?: (number | null) | Media;
+  ordre?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -301,6 +337,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'frise-historique';
         value: number | FriseHistorique;
+      } | null)
+    | ({
+        relationTo: 'article-presse';
+        value: number | ArticlePresse;
+      } | null)
+    | ({
+        relationTo: 'rapport-activite';
+        value: number | RapportActivite;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -443,6 +487,34 @@ export interface FriseHistoriqueSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "article-presse_select".
+ */
+export interface ArticlePresseSelect<T extends boolean = true> {
+  titre?: T;
+  source?: T;
+  annee?: T;
+  lien?: T;
+  ordre?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rapport-activite_select".
+ */
+export interface RapportActiviteSelect<T extends boolean = true> {
+  annee?: T;
+  titre?: T;
+  note?: T;
+  fichier?: T;
+  ordre?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -530,6 +602,16 @@ export interface Dimanche {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "benevolat-page".
+ */
+export interface BenevolatPage {
+  id: number;
+  note_manuscrite?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "historique_select".
  */
 export interface HistoriqueSelect<T extends boolean = true> {
@@ -571,6 +653,16 @@ export interface AccueilPageSelect<T extends boolean = true> {
  */
 export interface DimancheSelect<T extends boolean = true> {
   flyer?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "benevolat-page_select".
+ */
+export interface BenevolatPageSelect<T extends boolean = true> {
+  note_manuscrite?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

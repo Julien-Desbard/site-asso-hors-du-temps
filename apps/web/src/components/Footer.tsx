@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.bar}>
         <div className={styles.brand}>
-          <Image src="/logo.png" alt="L'Hors du Temps" height={76} width={190} />
+          <Image src="/logo.png" alt="L'Hors du Temps" height={76} width={130} />
           <p>Une maison pour souffler, à Saint-Marcellin en Isère. Un lieu paisible, pour un temps de vie partagé.</p>
         </div>
 

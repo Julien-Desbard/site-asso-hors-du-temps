@@ -111,6 +111,42 @@ Au décès de Carole, un autre couple est venu s'installer dans la maison de l'H
     facebook_url: 'https://www.facebook.com/people/Association-lHors-du-temps/61583118786303/',
     mecenat_url: 'https://www.tousbenevoles.org',
   },
+  benevolatPage: {
+    note_manuscrite:
+      "Vous êtes bienvenus pour rejoindre cette aventure humaine. L'Hors du temps existe grâce aux bénévoles. Ils apportent leur présence, leur écoute et leur sensibilité dans une relation d'égal à égal où la personne accueillie se sent respectée. Aux côtés du couple résident et des salariés, les bénévoles contribuent à faire de ce lieu, un lieu aux multiples visages. Si vous habitez la région et souhaitez donner un peu de votre temps en participant à la vie de la maison, vous pouvez rencontrer l'équipe d'accueil qui vous dira quelles sont les valeurs et les pratiques de la maison pour entourer les personnes accueillies.",
+  },
+  // Années à confirmer par l'association — non précisées sur la page over-blog source.
+  articlesPresse: [
+    {
+      titre: "L'Hors du temps cherche repreneurs/repreneuses",
+      source: 'Radio Royans',
+      annee: '2026',
+      lien: 'https://www.radioroyans.fr/lhors-du-temps-cherche-repreneurs-repreneuses/',
+      ordre: 1,
+    },
+    {
+      titre: 'Unissons la solidarité en Isère',
+      source: 'RCF',
+      annee: '2026',
+      lien: 'https://www.rcf.fr/ecologie-et-solidarite/unissons-la-solidarite-en-isere?episode=626570',
+      ordre: 2,
+    },
+  ],
+  // Titres et années à confirmer par l'association — placeholders en attendant le dépôt des vrais PDF.
+  rapportsActivite: [
+    {
+      annee: '2026',
+      titre: 'Lettre aux adhérents',
+      note: 'PDF — à déposer',
+      ordre: 1,
+    },
+    {
+      annee: '2025',
+      titre: "Bilan de l'assemblée générale",
+      note: 'PDF — à déposer',
+      ordre: 2,
+    },
+  ],
 };
 
 export async function seed() {
@@ -164,6 +200,28 @@ export async function seed() {
   if (!accueilPage.vie_commune_texte) {
     await payload.updateGlobal({ slug: 'accueil-page', data: seedData.accueilPage });
     payload.logger.info('[seed] Page Accueil insérée');
+  }
+
+  const benevolatPage = await payload.findGlobal({ slug: 'benevolat-page' });
+  if (!benevolatPage.note_manuscrite) {
+    await payload.updateGlobal({ slug: 'benevolat-page', data: seedData.benevolatPage });
+    payload.logger.info('[seed] Page Bénévolat insérée');
+  }
+
+  const { totalDocs: articlePresseCount } = await payload.count({ collection: 'article-presse' });
+  if (articlePresseCount === 0) {
+    for (const data of seedData.articlesPresse) {
+      await payload.create({ collection: 'article-presse', data, draft: false });
+    }
+    payload.logger.info('[seed] Articles de presse insérés');
+  }
+
+  const { totalDocs: rapportCount } = await payload.count({ collection: 'rapport-activite' });
+  if (rapportCount === 0) {
+    for (const data of seedData.rapportsActivite) {
+      await payload.create({ collection: 'rapport-activite', data, draft: false });
+    }
+    payload.logger.info('[seed] Rapports d\'activité insérés (sans fichier — à déposer)');
   }
 
   // dimanche reste vide : flyer uploadé à la main via l'admin.

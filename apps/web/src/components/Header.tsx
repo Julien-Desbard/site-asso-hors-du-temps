@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: '/etre-accueilli', label: 'Être accueilli' },
   { href: '/benevolat', label: 'Bénévolat' },
   { href: '/actualites', label: 'Actualités' },
+  { href: '/fonds-de-dotation', label: 'Fonds de dotation' },
 ];
 
 export default function Header() {

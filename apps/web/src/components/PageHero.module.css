@@ -19,6 +19,16 @@
   letter-spacing: -0.01em;
 }
 
+.titleHand {
+  font-family: var(--font-hand);
+  color: var(--teal-deep);
+  font-size: 76px;
+  font-weight: 700;
+  line-height: 1.1;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+}
+
 .lead {
   margin-top: 18px;
   font-size: 18px;
@@ -26,10 +36,20 @@
   max-width: 660px;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  gap: 48px;
+  align-items: start;
+}
+
 @media (max-width: 980px) {
   .title { font-size: 44px; }
+  .titleHand { font-size: 54px; }
+  .grid { grid-template-columns: 1fr; gap: 32px; }
 }
 
 @media (max-width: 560px) {
   .title { font-size: 34px; }
+  .titleHand { font-size: 40px; }
 }

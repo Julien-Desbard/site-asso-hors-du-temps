@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Callout from '@/components/Callout';
+import HandNote from '@/components/HandNote';
 import PageHero from '@/components/PageHero';
-import { getParametres } from '@/lib/payload';
+import { getBenevolatPage, getParametres } from '@/lib/payload';
 
 export const metadata: Metadata = {
   title: "Bénévolat — L'Hors du Temps",
@@ -10,26 +11,21 @@ export const metadata: Metadata = {
     "Donnez de votre temps ou de vos compétences à L'Hors du Temps : missions de bénévolat et mécénat de compétences.",
 };
 
+const NOTE_DEFAUT =
+  "Vous êtes bienvenus pour rejoindre cette aventure humaine. L'Hors du temps existe grâce aux bénévoles. Ils apportent leur présence, leur écoute et leur sensibilité dans une relation d'égal à égal où la personne accueillie se sent respectée. Aux côtés du couple résident et des salariés, les bénévoles contribuent à faire de ce lieu, un lieu aux multiples visages. Si vous habitez la région et souhaitez donner un peu de votre temps en participant à la vie de la maison, vous pouvez rencontrer l'équipe d'accueil qui vous dira quelles sont les valeurs et les pratiques de la maison pour entourer les personnes accueillies.";
+
 export default async function BenevolatPage() {
-  const parametre = await getParametres();
+  const [parametre, benevolatPage] = await Promise.all([getParametres(), getBenevolatPage()]);
 
   return (
     <>
       <BreadcrumbJsonLd items={[{ name: 'Bénévolat', url: 'https://assohorsdutemps.fr/benevolat' }]} />
       <PageHero
-        scrib="Donner un peu de son temps"
-        title="Bénévolat"
+        title="Donner de son temps"
+        titleVariant="hand"
         lead="La maison vit grâce à l'engagement de ses bénévoles, que ce soit pour des permanences de quelques heures, d'une journée, d'une nuit, pour un Dimanche Ensemble ou encore pour mettre au service des compétences particulières : il y a mille façons d'aider, et une place pour vous. Voici 2 façons concrètes de nous rejoindre :"
+        aside={<HandNote text={benevolatPage?.note_manuscrite ?? NOTE_DEFAUT} />}
       />
-
-      {/* INTRO */}
-      <section className="section">
-        <div className="wrap">
-          <div className="prose">
-            <p>Vous êtes bienvenus pour rejoindre cette aventure humaine. L&rsquo;Hors du temps existe grâce aux bénévoles. Ils apportent leur présence, leur écoute et leur sensibilité dans une relation d&rsquo;égal à égal où la personne accueillie se sent respectée. Aux côtés du couple résident et des salariés, les bénévoles contribuent à faire de ce lieu, un lieu aux multiples visages. Si vous habitez la région et souhaitez donner un peu de votre temps en participant à la vie de la maison, vous pouvez rencontrer l&rsquo;équipe d&rsquo;accueil qui vous dira quelles sont les valeurs et les pratiques de la maison pour entourer les personnes accueillies.</p>
-          </div>
-        </div>
-      </section>
 
       {/* DEUX PISTES */}
       <section className="section section-cream">
@@ -59,7 +55,7 @@ export default async function BenevolatPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Découvrir nos missions sur TousBénévoles
+                Découvrir nos missions sur TousBénévoles →
               </a>
             </div>
           </div>
@@ -68,7 +64,7 @@ export default async function BenevolatPage() {
 
       <Callout
         title="Une autre idée pour aider ?"
-        text="Vous avez une compétence, un réseau, du matériel ou simplement de l'enthousiasme à partager ? Écrivez-nous, on trouvera comment faire ensemble."
+        text="Vous avez une compétence, un réseau, du matériel ou simplement de l'enthousiasme à partager ? Écrivez-nous, on trouvera peut-être comment faire ensemble."
         ctaLabel="Nous écrire"
         ctaHref="/nous-contacter"
       />

@@ -3,7 +3,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
-import { getDimanches, getFriseHistorique, getHistorique, getMembresEquipe } from '@/lib/payload';
+import { getArticlesPresse, getDimanches, getFriseHistorique, getHistorique, getMembresEquipe, getRapportsActivite } from '@/lib/payload';
 
 export const metadata: Metadata = {
   title: "Qui sommes-nous ? — L'Hors du Temps",
@@ -11,26 +11,14 @@ export const metadata: Metadata = {
     "L'histoire de L'Hors du Temps depuis 2010, l'équipe actuelle, les Dimanches Ensemble, ce qu'on dit de nous et nos rapports d'activité.",
 };
 
-const SUBNAV = [
-  { id: 'historique', label: 'Historique' },
-  { id: 'equipe', label: "L'équipe actuelle" },
-  { id: 'dimanches', label: 'Dimanches Ensemble' },
-  { id: 'presse', label: 'On parle de nous…' },
-  { id: 'rapports', label: "Rapports d'activité" },
-];
-
-// Ne pas ajouter d'entrées fictives ici — la section est masquée si tous les href sont '#'
-const PRESSE_LINKS: { year: string; title: string; source: string; href: string }[] = [];
-
-// Ne pas ajouter d'entrées fictives ici — la section est masquée si tous les href sont '#'
-const RAPPORTS: { year: string; title: string; note: string; href: string }[] = [];
-
 export default async function QuiSommesNousPage() {
-  const [membres, historique, frise, dimanche] = await Promise.all([
+  const [membres, historique, frise, dimanche, articlesPresse, rapports] = await Promise.all([
     getMembresEquipe(),
     getHistorique(),
     getFriseHistorique(),
     getDimanches(),
+    getArticlesPresse(),
+    getRapportsActivite(),
   ]);
 
   const recitParagraphes = historique?.recit ? historique.recit.split(/\n\n+/).filter(Boolean) : [];
@@ -38,6 +26,14 @@ export default async function QuiSommesNousPage() {
   const flyer = typeof dimanche?.flyer === 'object' ? dimanche.flyer : null;
   const flyerUrl = flyer?.url ?? null;
   const flyerAlt = flyer?.alt ?? 'Flyer Dimanches Ensemble';
+
+  const subnav = [
+    (recitParagraphes.length > 0 || frise.length > 0) && { id: 'historique', label: 'Historique' },
+    membres.length > 0 && { id: 'equipe', label: "L'équipe actuelle" },
+    { id: 'dimanches', label: 'Dimanches Ensemble' },
+    articlesPresse.length > 0 && { id: 'presse', label: 'On parle de nous…' },
+    { id: 'rapports', label: "Rapports d'activité" },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   return (
     <>
@@ -48,7 +44,7 @@ export default async function QuiSommesNousPage() {
         lead="Une petite association née en 2010 autour d'une conviction simple : chacun mérite un endroit où se poser. Voici notre histoire, l'équipe et la vie de la maison."
       />
 
-      <SubNav items={SUBNAV} />
+      <SubNav items={subnav} />
 
       {/* HISTORIQUE */}
       {(recitParagraphes.length > 0 || frise.length > 0) && (
@@ -141,7 +137,7 @@ export default async function QuiSommesNousPage() {
       </section>
 
       {/* ON PARLE DE NOUS — masqué tant que vide */}
-      {PRESSE_LINKS.length > 0 && (
+      {articlesPresse.length > 0 && (
         <section className="section section-cream anchor" id="presse">
           <div className="wrap">
             <div className="section-head">
@@ -150,11 +146,11 @@ export default async function QuiSommesNousPage() {
               <p className="intro">Articles, interviews et reportages consacrés à l&rsquo;association et à la maison.</p>
             </div>
             <div className="link-list">
-              {PRESSE_LINKS.map((item, i) => (
-                <a key={i} className="link-row" href={item.href} target="_blank" rel="noopener noreferrer">
-                  <span className="link-meta">{item.year}</span>
+              {articlesPresse.map((item) => (
+                <a key={item.id} className="link-row" href={item.lien} target="_blank" rel="noopener noreferrer">
+                  <span className="link-meta">{item.annee}</span>
                   <span className="link-title">
-                    {item.title}
+                    {item.titre}
                     <small>{item.source}</small>
                   </span>
                   <span className="link-arrow">↗</span>
@@ -165,30 +161,43 @@ export default async function QuiSommesNousPage() {
         </section>
       )}
 
-      {/* RAPPORTS D'ACTIVITÉ — masqué tant que vide */}
-      {RAPPORTS.length > 0 && (
-        <section className="section anchor" id="rapports">
-          <div className="wrap">
-            <div className="section-head">
-              <span className="scrib scrib-teal" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>En toute transparence</span>
-              <h2>Rapports d&rsquo;activité</h2>
-              <p className="intro">Vous pouvez consulter ici nos lettres aux adhérents et bilans des précédentes AG.</p>
-            </div>
-            <div className="link-list">
-              {RAPPORTS.map((r) => (
-                <a key={r.year} className="link-row" href={r.href}>
-                  <span className="link-meta">{r.year}</span>
-                  <span className="link-title">
-                    {r.title}
-                    <small>{r.note}</small>
-                  </span>
-                  <span className="link-arrow">↓</span>
-                </a>
-              ))}
-            </div>
+      {/* RAPPORTS D'ACTIVITÉ */}
+      <section className="section anchor" id="rapports">
+        <div className="wrap">
+          <div className="section-head">
+            <span className="scrib scrib-teal" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>En toute transparence</span>
+            <h2>Rapports d&rsquo;activité</h2>
+            <p className="intro">Vous pouvez consulter ici nos lettres aux adhérents et bilans des précédentes AG.</p>
           </div>
-        </section>
-      )}
+          {rapports.length > 0 && (
+            <div className="link-list">
+              {rapports.map((r) => {
+                const fichier = typeof r.fichier === 'object' ? r.fichier : null;
+                const fichierUrl = fichier?.url ?? null;
+                const content = (
+                  <>
+                    <span className="link-meta">{r.annee}</span>
+                    <span className="link-title">
+                      {r.titre}
+                      {r.note && <small>{r.note}</small>}
+                    </span>
+                    <span className="link-arrow">{fichierUrl ? '↓' : '…'}</span>
+                  </>
+                );
+                return fichierUrl ? (
+                  <a key={r.id} className="link-row" href={fichierUrl} target="_blank" rel="noopener noreferrer">
+                    {content}
+                  </a>
+                ) : (
+                  <div key={r.id} className="link-row" style={{ opacity: 0.6, cursor: 'default' }}>
+                    {content}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
 
     </>
   );

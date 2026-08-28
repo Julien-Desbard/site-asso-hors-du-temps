@@ -1,7 +1,7 @@
 import { getPayload } from 'payload';
 import { unstable_cache } from 'next/cache';
 import config from '../payload.config.ts';
-import type { AccueilPage, Article, Dimanche, EtapeAccueil, FriseHistorique, Historique, MembreEquipe, Parametre } from '../payload-types.ts';
+import type { AccueilPage, Article, ArticlePresse, BenevolatPage, Dimanche, EtapeAccueil, FriseHistorique, Historique, MembreEquipe, Parametre, RapportActivite } from '../payload-types.ts';
 
 export async function getArticles(): Promise<Article[]> {
   return unstable_cache(
@@ -134,5 +134,52 @@ export async function getAccueilPage(): Promise<AccueilPage | null> {
     },
     ['accueil-page'],
     { tags: ['accueil-page'] },
+  )();
+}
+
+export async function getBenevolatPage(): Promise<BenevolatPage | null> {
+  return unstable_cache(
+    async () => {
+      const payload = await getPayload({ config });
+      return payload.findGlobal({ slug: 'benevolat-page', draft: false });
+    },
+    ['benevolat-page'],
+    { tags: ['benevolat-page'] },
+  )();
+}
+
+export async function getArticlesPresse(): Promise<ArticlePresse[]> {
+  return unstable_cache(
+    async () => {
+      const payload = await getPayload({ config });
+      const { docs } = await payload.find({
+        collection: 'article-presse',
+        depth: 1,
+        draft: false,
+        sort: 'ordre',
+        limit: 50,
+      });
+      return docs;
+    },
+    ['article-presse'],
+    { tags: ['article-presse'] },
+  )();
+}
+
+export async function getRapportsActivite(): Promise<RapportActivite[]> {
+  return unstable_cache(
+    async () => {
+      const payload = await getPayload({ config });
+      const { docs } = await payload.find({
+        collection: 'rapport-activite',
+        depth: 1,
+        draft: false,
+        sort: 'ordre',
+        limit: 50,
+      });
+      return docs;
+    },
+    ['rapport-activite'],
+    { tags: ['rapport-activite'] },
   )();
 }

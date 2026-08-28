@@ -17,6 +17,7 @@ export default async function HomePage() {
   const [allArticles, parametres] = await Promise.all([getArticles(), getParametres()]);
   const articles = allArticles.slice(0, 3);
   const donFonctionnementUrl = parametres?.don_fonctionnement_url ?? 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
+  const donFondsDotationUrl = parametres?.don_fonds_dotation_url ?? 'https://www.helloasso.com/associations/l-hors-du-temps/formulaires/2';
 
   return (
     <>
@@ -163,7 +164,7 @@ export default async function HomePage() {
               <span className="don-eyebrow">Un projet pour l&rsquo;avenir</span>
               <h3>Pour le rachat de la maison</h3>
               <p>En 2027, la maison sera mise en vente. Le fonds de dotation « La maison Hors du Temps » nous permet d&rsquo;agir. Aidez-nous à la racheter.</p>
-              <Link href="/fonds-de-dotation" className="btn btn-primary">Soutenir le fonds de dotation →</Link>
+              <a className="btn btn-primary" href={donFondsDotationUrl} target="_blank" rel="noopener noreferrer">Soutenir le fonds de dotation →</a>
             </div>
           </div>
         </div>

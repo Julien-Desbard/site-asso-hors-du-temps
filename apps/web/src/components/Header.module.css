@@ -25,10 +25,11 @@
 
 .nav {
   display: flex;
-  gap: 26px;
+  gap: 20px;
   font-size: 15px;
   font-weight: 600;
   color: var(--ink-soft);
+  white-space: nowrap;
 }
 
 .nav a {
@@ -53,6 +54,7 @@
 .pill {
   padding: 9px 17px !important;
   font-size: 14px !important;
+  white-space: nowrap;
 }
 
 .toggle {
@@ -70,7 +72,7 @@
   display: block;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1130px) {
   .bar { padding: 14px 24px; }
 
   .nav,

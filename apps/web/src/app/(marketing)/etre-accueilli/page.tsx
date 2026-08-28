@@ -42,7 +42,6 @@ export default async function EtreAccueilliPage() {
           <div className="section-head">
             <span className="scrib scrib-teal" style={{ fontSize: 30, transform: 'rotate(-1.5deg)', display: 'inline-block' }}>Pas à pas</span>
             <h2>Processus pour être accueilli</h2>
-            <p className="intro">Du premier contact au retour chez soi, chaque étape se fait en douceur, à votre rythme.</p>
           </div>
           <div className="steps steps-stack">
             {steps.map((step, i) => (

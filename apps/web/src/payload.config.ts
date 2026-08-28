@@ -11,17 +11,20 @@ import { Articles } from './collections/Articles.ts';
 import { MembreEquipe } from './collections/MembreEquipe.ts';
 import { EtapeAccueil } from './collections/EtapeAccueil.ts';
 import { FriseHistorique } from './collections/FriseHistorique.ts';
+import { ArticlePresse } from './collections/ArticlePresse.ts';
+import { RapportActivite } from './collections/RapportActivite.ts';
 import { Historique } from './globals/Historique.ts';
 import { Parametre } from './globals/Parametre.ts';
 import { AccueilPage } from './globals/AccueilPage.ts';
 import { Dimanche } from './globals/Dimanche.ts';
+import { BenevolatPage } from './globals/BenevolatPage.ts';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
-  collections: [Users, Media, Articles, MembreEquipe, EtapeAccueil, FriseHistorique],
-  globals: [Historique, Parametre, AccueilPage, Dimanche],
+  collections: [Users, Media, Articles, MembreEquipe, EtapeAccueil, FriseHistorique, ArticlePresse, RapportActivite],
+  globals: [Historique, Parametre, AccueilPage, Dimanche, BenevolatPage],
   editor: lexicalEditor(),
   i18n: {
     supportedLanguages: { fr },

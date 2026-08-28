@@ -1,0 +1,22 @@
+.sheet {
+  position: relative;
+  background: #fffdf7;
+  padding: 32px 30px;
+  transform: rotate(1.2deg);
+  box-shadow: 0 18px 40px -16px rgba(31,26,23,0.28), 0 1px 0 0 rgba(0,0,0,0.04);
+}
+
+.sheet :global(.tape) {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.sheet p {
+  font-family: var(--font-hand-note);
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.sheet p + p { margin-top: 14px; }
