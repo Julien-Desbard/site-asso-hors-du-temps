@@ -4,11 +4,19 @@
   border-bottom: 1px solid #e6dcc6;
 }
 
+.heroTightBottom {
+  padding-bottom: 24px;
+}
+
 .scrib {
   font-size: 30px;
   transform: rotate(-2deg);
   display: inline-block;
   margin-bottom: 4px;
+}
+
+.scribWide {
+  margin-bottom: 20px;
 }
 
 .title {
@@ -33,12 +41,12 @@
   margin-top: 18px;
   font-size: 18px;
   color: var(--ink-soft);
-  max-width: 660px;
+  text-align: justify;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 0.85fr;
+  grid-template-columns: 1fr 0.765fr;
   gap: 48px;
   align-items: start;
 }

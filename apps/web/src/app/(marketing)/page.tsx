@@ -10,7 +10,7 @@ const PORTES = [
   { href: '/qui-sommes-nous', bg: '#e8e0d0', titre: 'Qui sommes-nous ?', desc: "Notre histoire depuis 2010, l'équipe actuelle, les Dimanches Ensemble et ce qu'on dit de nous.", cta: 'En savoir plus' },
   { href: '/etre-accueilli', bg: '#f4dccb', titre: 'Je souhaite être accueilli', desc: "Vous traversez une période difficile ? Découvrez les modalités de l'accueil, pas à pas.", cta: 'Préparer ma venue' },
   { href: '/benevolat', bg: '#dfe7d2', titre: "J'aimerais être bénévole", desc: "Rejoignez l'équipe d'accueil, le Fonds de dotation ou les Dimanches Ensemble — il y a une place pour vous.", cta: 'Voir les missions' },
-  { href: '/#don', bg: '#f0d9a8', titre: 'Je fais un don', desc: "Soutenez le fonctionnement quotidien — ou le rachat de la maison via le fonds de dotation.", cta: "Soutenir l'association" },
+  { href: '/#don', bg: '#f0d9a8', titre: 'Je fais un don', desc: "Soutenez le fonctionnement quotidien — ou le rachat de la maison via le Fonds de dotation.", cta: "Soutenir l'association" },
 ];
 
 export default async function HomePage() {
@@ -163,8 +163,8 @@ export default async function HomePage() {
               <span className="don-badge">Urgence 2027</span>
               <span className="don-eyebrow">Un projet pour l&rsquo;avenir</span>
               <h3>Pour le rachat de la maison</h3>
-              <p>En 2027, la maison sera mise en vente. Le fonds de dotation « La maison Hors du Temps » nous permet d&rsquo;agir. Aidez-nous à la racheter.</p>
-              <a className="btn btn-primary" href={donFondsDotationUrl} target="_blank" rel="noopener noreferrer">Soutenir le fonds de dotation →</a>
+              <p>En 2027, la maison sera mise en vente. Le Fonds de dotation « La maison Hors du Temps » nous permet d&rsquo;agir. Aidez-nous à la racheter.</p>
+              <a className="btn btn-primary" href={donFondsDotationUrl} target="_blank" rel="noopener noreferrer">Soutenir le Fonds de dotation →</a>
             </div>
           </div>
         </div>

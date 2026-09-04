@@ -21,8 +21,8 @@ export default async function BenevolatPage() {
     <>
       <BreadcrumbJsonLd items={[{ name: 'Bénévolat', url: 'https://assohorsdutemps.fr/benevolat' }]} />
       <PageHero
-        title="Donner de son temps"
-        titleVariant="hand"
+        scrib="Donner de son temps"
+        title="Bénévolat"
         lead="La maison vit grâce à l'engagement de ses bénévoles, que ce soit pour des permanences de quelques heures, d'une journée, d'une nuit, pour un Dimanche Ensemble ou encore pour mettre au service des compétences particulières : il y a mille façons d'aider, et une place pour vous. Voici 2 façons concrètes de nous rejoindre :"
         aside={<HandNote text={benevolatPage?.note_manuscrite ?? NOTE_DEFAUT} />}
       />
@@ -33,8 +33,8 @@ export default async function BenevolatPage() {
           <h2 className="sr-only">Deux façons de nous rejoindre</h2>
           <div className="duo">
             <div className="act-card">
-              <span className="act-eyebrow">Bénévolat</span>
-              <h3>Devenir bénévole</h3>
+              <span className="act-eyebrow">Donner de son temps</span>
+              <h3>Bénévolat</h3>
               <p>Rejoignez l&rsquo;équipe en retrouvant toutes nos missions sur la plateforme JeVeuxAider du gouvernement.</p>
               <a
                 className="btn btn-teal"

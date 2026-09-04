@@ -30,6 +30,8 @@ export default async function EtreAccueilliPage() {
       <BreadcrumbJsonLd items={[{ name: 'Être accueilli', url: 'https://assohorsdutemps.fr/etre-accueilli' }]} />
       <PageHero
         scrib="Vous avez besoin de souffler"
+        scribGap
+        tightBottom
         title="Être accueilli"
         lead="Vous traversez une période difficile et avez besoin de faire une halte ? Vous pouvez être accueilli à l'Hors du Temps pour une période courte si vous avez un logement (places pour 3 personnes, pour un minimum d'1 semaine) ou longue (places pour 2 personnes, pour un maximum de 6 mois). L'équipe d'accueil se compose en continu de 2 personnes (bénévoles ou salariées), les repas se prennent ensemble, c'est à dire à 7 lorsque nous sommes au complet. Voici comment cela se passe :"
       />

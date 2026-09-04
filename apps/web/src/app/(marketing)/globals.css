@@ -96,6 +96,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 
 /* sections */
 .section { padding: 76px 0; }
+#processus { padding-top: 32px; }
 .section-cream { background: var(--cream); }
 .section-warm { background: var(--cream-warm); }
 
