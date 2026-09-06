@@ -3,6 +3,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Callout from '@/components/Callout';
 import HandNote from '@/components/HandNote';
 import PageHero from '@/components/PageHero';
+import { NOTE_BENEVOLAT_DEFAUT } from '@/lib/fallbacks';
 import { getBenevolatPage, getParametres } from '@/lib/payload';
 
 export const metadata: Metadata = {
@@ -10,9 +11,6 @@ export const metadata: Metadata = {
   description:
     "Donnez de votre temps ou de vos compétences à L'Hors du Temps : missions de bénévolat et mécénat de compétences.",
 };
-
-const NOTE_DEFAUT =
-  "Vous êtes bienvenus pour rejoindre cette aventure humaine. L'Hors du temps existe grâce aux bénévoles. Ils apportent leur présence, leur écoute et leur sensibilité dans une relation d'égal à égal où la personne accueillie se sent respectée. Aux côtés du couple résident et des salariés, les bénévoles contribuent à faire de ce lieu, un lieu aux multiples visages. Si vous habitez la région et souhaitez donner un peu de votre temps en participant à la vie de la maison, vous pouvez rencontrer l'équipe d'accueil qui vous dira quelles sont les valeurs et les pratiques de la maison pour entourer les personnes accueillies.";
 
 export default async function BenevolatPage() {
   const [parametre, benevolatPage] = await Promise.all([getParametres(), getBenevolatPage()]);
@@ -24,7 +22,7 @@ export default async function BenevolatPage() {
         scrib="Donner de son temps"
         title="Bénévolat"
         lead="La maison vit grâce à l'engagement de ses bénévoles, que ce soit pour des permanences de quelques heures, d'une journée, d'une nuit, pour un Dimanche Ensemble ou encore pour mettre au service des compétences particulières : il y a mille façons d'aider, et une place pour vous. Voici 2 façons concrètes de nous rejoindre :"
-        aside={<HandNote text={benevolatPage?.note_manuscrite ?? NOTE_DEFAUT} />}
+        aside={<HandNote text={benevolatPage?.note_manuscrite ?? NOTE_BENEVOLAT_DEFAUT} />}
       />
 
       {/* DEUX PISTES */}
