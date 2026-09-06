@@ -115,19 +115,47 @@ describe('lib/payload — base injoignable', () => {
 });
 
 describe('lib/payload — base disponible', () => {
-  it('renvoie les documents de la base sans rien journaliser', async () => {
-    const vraisArticles = [{ id: 1, titre: 'Depuis la base' }];
-    baseDisponible(vraisArticles);
+  const DOCS = [{ id: 1, titre: 'Depuis la base' }];
+  const GLOBAL = { id: 1, valeur: 'Depuis la base' };
 
-    await expect(lib.getArticles()).resolves.toEqual(vraisArticles);
+  it.each([
+    ['getArticles', () => lib.getArticles()],
+    ['getMembresEquipe', () => lib.getMembresEquipe()],
+    ['getFriseHistorique', () => lib.getFriseHistorique()],
+    ['getEtapesAccueil', () => lib.getEtapesAccueil()],
+    ['getArticlesPresse', () => lib.getArticlesPresse()],
+    ['getRapportsActivite', () => lib.getRapportsActivite()],
+  ])('%s renvoie les documents de la base sans rien journaliser', async (_nom, appel) => {
+    baseDisponible(DOCS, GLOBAL);
+
+    await expect(appel()).resolves.toEqual(DOCS);
     expect(journalErreur).not.toHaveBeenCalled();
   });
 
-  it('renvoie le global depuis la base', async () => {
-    baseDisponible([], { id: 1, recit: 'Récit en base' });
+  it.each([
+    ['getHistorique', () => lib.getHistorique()],
+    ['getParametres', () => lib.getParametres()],
+    ['getDimanches', () => lib.getDimanches()],
+    ['getAccueilPage', () => lib.getAccueilPage()],
+    ['getBenevolatPage', () => lib.getBenevolatPage()],
+  ])('%s renvoie le global de la base sans rien journaliser', async (_nom, appel) => {
+    baseDisponible(DOCS, GLOBAL);
 
-    await expect(lib.getHistorique()).resolves.toEqual({ id: 1, recit: 'Récit en base' });
+    await expect(appel()).resolves.toEqual(GLOBAL);
     expect(journalErreur).not.toHaveBeenCalled();
+  });
+
+  it('getArticleBySlug renvoie le document trouvé', async () => {
+    baseDisponible(DOCS, GLOBAL);
+
+    await expect(lib.getArticleBySlug('depuis-la-base')).resolves.toEqual(DOCS[0]);
+    expect(journalErreur).not.toHaveBeenCalled();
+  });
+
+  it('getArticleBySlug renvoie null quand la base ne trouve rien', async () => {
+    baseDisponible([], GLOBAL);
+
+    await expect(lib.getArticleBySlug('inexistant')).resolves.toBeNull();
   });
 });
 

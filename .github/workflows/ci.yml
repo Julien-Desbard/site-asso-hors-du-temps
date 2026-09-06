@@ -73,7 +73,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @hors-du-temps/web test
+      - run: pnpm --filter @hors-du-temps/web test:coverage
 
   audit:
     name: Security audit
