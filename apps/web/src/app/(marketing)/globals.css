@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Nunito:wght@300;400;500;600;700;800&family=Patrick+Hand&display=swap');
-
+/* Polices chargées par next/font (src/app/fonts.ts), variables posées sur <html>. */
 :root {
   --brick: #C44536;
   --brick-deep: #9a3528;
@@ -15,10 +14,10 @@
   --ochre: #d4a93a;
   --sky: #cfe4e2;
 
-  --font-hand: 'Caveat', cursive;
-  --font-hand-note: 'Patrick Hand', cursive;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Nunito', system-ui, sans-serif;
+  --font-hand: var(--nf-caveat), cursive;
+  --font-hand-note: var(--nf-patrick-hand), cursive;
+  --font-serif: var(--nf-cormorant), Georgia, serif;
+  --font-body: var(--nf-nunito), system-ui, sans-serif;
 
   --maxw: 1180px;
 }
@@ -245,6 +244,9 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .link-title { font-family: var(--font-serif); font-size: 21px; font-weight: 600; flex: 1; }
 .link-title small { display: block; font-family: var(--font-body); font-size: 13.5px; font-weight: 400; color: var(--ink-light); margin-top: 2px; }
 .link-arrow { color: var(--teal-deep); font-weight: 800; }
+.link-row-video { flex-direction: column; align-items: stretch; }
+.link-row-video:hover { transform: none; }
+.link-row-head { display: flex; align-items: center; gap: 18px; }
 
 /* -------- don section -------- */
 .don-section {
@@ -309,6 +311,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .dimanches-prose { max-width: 100%; }
 .dimanches-prose p { max-width: 100%; }
 .dimanches-block .flyer-ph { max-width: 360px; align-self: center; }
+/* ~2× l'ancien rendu (flyer portrait figé à 400 px de haut, soit ~280 px de large). */
+.dimanches-block .flyer-img { width: 100%; max-width: 560px; align-self: center; }
 
 .flyer-ph {
   aspect-ratio: 3 / 4;

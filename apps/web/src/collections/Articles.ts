@@ -1,17 +1,19 @@
 import type { CollectionConfig } from 'payload';
 import { generateSlug } from '../hooks/generateSlug.ts';
 import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks/revalidate.ts';
+import { estAdmin, masquerHorsAdmin } from '../lib/acces.ts';
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
   admin: {
+    hidden: masquerHorsAdmin,
     useAsTitle: 'titre',
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: estAdmin,
+    update: estAdmin,
+    delete: estAdmin,
   },
   versions: {
     drafts: true,

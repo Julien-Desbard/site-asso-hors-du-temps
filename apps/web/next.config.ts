@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
       },
+      {
+        // Miniatures des vidéos YouTube de la section presse (façade avant clic).
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        pathname: '/vi/**',
+      },
     ],
   },
   async headers() {
@@ -33,6 +39,8 @@ const nextConfig: NextConfig = {
               `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
               "style-src 'self' 'unsafe-inline'",
               "connect-src 'self' https://*.sentry.io",
+              // Lecteur des vidéos YouTube de la section presse, chargé au clic.
+              'frame-src https://www.youtube-nocookie.com',
               "frame-ancestors 'none'",
             ].join('; '),
           },

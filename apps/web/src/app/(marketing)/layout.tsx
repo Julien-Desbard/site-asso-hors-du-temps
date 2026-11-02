@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { getParametres } from '@/lib/payload';
+import { caveat, cormorant, nunito, patrickHand } from '../fonts';
 import './globals.css';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://assohorsdutemps.fr';
@@ -81,7 +82,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${caveat.variable} ${cormorant.variable} ${nunito.variable} ${patrickHand.variable}`}>
       <head>
         <script
           type="application/ld+json"

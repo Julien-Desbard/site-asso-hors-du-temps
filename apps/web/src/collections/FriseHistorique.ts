@@ -1,16 +1,18 @@
 import type { CollectionConfig } from 'payload';
 import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks/revalidate.ts';
+import { estAdmin, masquerHorsAdmin } from '../lib/acces.ts';
 
 export const FriseHistorique: CollectionConfig = {
   slug: 'frise-historique',
   admin: {
+    hidden: masquerHorsAdmin,
     useAsTitle: 'evenement',
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: estAdmin,
+    update: estAdmin,
+    delete: estAdmin,
   },
   versions: {
     drafts: true,

@@ -3,7 +3,9 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import Image from 'next/image';
 import PageHero from '@/components/PageHero';
 import SubNav from '@/components/SubNav';
+import VideoYoutube from '@/components/VideoYoutube';
 import { getArticlesPresse, getDimanches, getFriseHistorique, getHistorique, getMembresEquipe, getRapportsActivite } from '@/lib/payload';
+import { formaterMoisAnnee, idVideoYoutube } from '@/lib/presse';
 
 export const metadata: Metadata = {
   title: "Qui sommes-nous ? — L'Hors du Temps",
@@ -120,13 +122,15 @@ export default async function QuiSommesNousPage() {
               <p>Toutes les informations importantes (prochaines dates, participation, contact, etc) se trouvent sur le flyer ci-dessous&nbsp;:</p>
             </div>
             {flyerUrl ? (
-              <div className="flyer-img" style={{ position: 'relative', minHeight: 400 }}>
+              <div className="flyer-img">
+                {/* Affiché aux proportions réelles du fichier (plus de hauteur figée à 400 px). */}
                 <Image
                   src={flyerUrl}
                   alt={flyerAlt ?? 'Flyer Dimanches Ensemble'}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  width={flyer?.width ?? 626}
+                  height={flyer?.height ?? 891}
+                  style={{ width: '100%', height: 'auto' }}
+                  sizes="(max-width: 768px) 100vw, 560px"
                 />
               </div>
             ) : (
@@ -146,16 +150,30 @@ export default async function QuiSommesNousPage() {
               <p className="intro">Articles, interviews et reportages consacrés à l&rsquo;association et à la maison.</p>
             </div>
             <div className="link-list">
-              {articlesPresse.map((item) => (
-                <a key={item.id} className="link-row" href={item.lien} target="_blank" rel="noopener noreferrer">
-                  <span className="link-meta">{item.annee}</span>
-                  <span className="link-title">
-                    {item.titre}
-                    <small>{item.source}</small>
-                  </span>
-                  <span className="link-arrow">↗</span>
-                </a>
-              ))}
+              {articlesPresse.map((item) => {
+                const idVideo = idVideoYoutube(item.lien);
+                const enTete = (
+                  <>
+                    <span className="link-meta">{formaterMoisAnnee(item.date)}</span>
+                    <span className="link-title">
+                      {item.titre}
+                      <small>{item.source}</small>
+                    </span>
+                  </>
+                );
+                // Vidéo YouTube : lecteur intégré sous le titre plutôt qu'un lien sortant.
+                return idVideo ? (
+                  <div key={item.id} className="link-row link-row-video">
+                    <div className="link-row-head">{enTete}</div>
+                    <VideoYoutube id={idVideo} titre={item.titre} />
+                  </div>
+                ) : (
+                  <a key={item.id} className="link-row" href={item.lien} target="_blank" rel="noopener noreferrer">
+                    {enTete}
+                    <span className="link-arrow">↗</span>
+                  </a>
+                );
+              })}
             </div>
           </div>
         </section>

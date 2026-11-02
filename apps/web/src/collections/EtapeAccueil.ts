@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks/revalidate.ts';
+import { estAdmin, masquerHorsAdmin } from '../lib/acces.ts';
 
 export const EtapeAccueil: CollectionConfig = {
   slug: 'etape-accueil',
@@ -8,13 +9,14 @@ export const EtapeAccueil: CollectionConfig = {
     plural: "Étapes d'accueil",
   },
   admin: {
+    hidden: masquerHorsAdmin,
     useAsTitle: 'titre',
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: estAdmin,
+    update: estAdmin,
+    delete: estAdmin,
   },
   versions: {
     drafts: true,

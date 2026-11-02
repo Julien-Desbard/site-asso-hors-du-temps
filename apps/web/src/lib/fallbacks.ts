@@ -6,12 +6,14 @@
 // seed. Plutôt qu'un `as`, on annote la destination (`const X: Article[] = …`) :
 // TypeScript type alors contextuellement chaque littéral et vérifie tous les champs.
 import { seedData } from '../seed/data.ts';
+import { fondsDotationDefaut } from '../seed/fonds.ts';
 import type {
   AccueilPage,
   Article,
   ArticlePresse,
   BenevolatPage,
   EtapeAccueil,
+  FondsDotation,
   FriseHistorique,
   Historique,
   MembreEquipe,
@@ -79,5 +81,10 @@ export const NOTE_BENEVOLAT_DEFAUT = seedData.benevolatPage.note_manuscrite;
 
 export const BENEVOLAT_PAGE_SECOURS: BenevolatPage = {
   ...seedData.benevolatPage,
+  ...estampille(0),
+};
+
+export const FONDS_DOTATION_SECOURS: FondsDotation = {
+  ...fondsDotationDefaut,
   ...estampille(0),
 };

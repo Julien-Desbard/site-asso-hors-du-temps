@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { estAdmin, estConnecte } from '../lib/acces.ts';
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -11,9 +12,11 @@ export const Media: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    // Tout compte connecté (y compris « fonds ») peut déposer et retoucher des images ;
+    // la suppression, qui casserait les pages qui les utilisent, reste aux admins.
+    create: estConnecte,
+    update: estConnecte,
+    delete: estAdmin,
   },
   upload: {
     mimeTypes: ['image/*', 'application/pdf'],

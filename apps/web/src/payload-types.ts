@@ -100,6 +100,7 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'fonds-dotation': FondsDotation;
     historique: Historique;
     parametre: Parametre;
     'accueil-page': AccueilPage;
@@ -107,6 +108,7 @@ export interface Config {
     'benevolat-page': BenevolatPage;
   };
   globalsSelect: {
+    'fonds-dotation': FondsDotationSelect<false> | FondsDotationSelect<true>;
     historique: HistoriqueSelect<false> | HistoriqueSelect<true>;
     parametre: ParametreSelect<false> | ParametreSelect<true>;
     'accueil-page': AccueilPageSelect<false> | AccueilPageSelect<true>;
@@ -147,6 +149,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'admin' | 'fonds';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -268,9 +271,14 @@ export interface ArticlePresse {
   id: number;
   titre: string;
   source: string;
-  annee: string;
+  /**
+   * Sert à classer les articles, du plus récent au plus ancien. Le site affiche le mois et l’année.
+   */
+  date: string;
+  /**
+   * Un lien YouTube (youtu.be/… ou youtube.com/watch?v=…) affiche la vidéo directement sur le site.
+   */
   lien: string;
-  ordre?: number | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -393,6 +401,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -492,9 +501,8 @@ export interface FriseHistoriqueSelect<T extends boolean = true> {
 export interface ArticlePresseSelect<T extends boolean = true> {
   titre?: T;
   source?: T;
-  annee?: T;
+  date?: T;
   lien?: T;
-  ordre?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -555,6 +563,117 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fonds-dotation".
+ */
+export interface FondsDotation {
+  id: number;
+  /**
+   * Laisser vide pour garder la photo actuelle (extraite du dépliant PDF).
+   */
+  photo_couverture?: (number | null) | Media;
+  photo_couverture_defaut?: string | null;
+  titre: string;
+  projet_titre?: string | null;
+  /**
+   * Laisser une ligne vide entre deux paragraphes.
+   */
+  projet_texte?: string | null;
+  /**
+   * Le thermomètre se remplit automatiquement : montant récolté ÷ (montant récolté + objectif supplémentaire).
+   */
+  collecte: {
+    titre?: string | null;
+    recolte: number;
+    objectif_libelle?: string | null;
+    objectif: number;
+    /**
+     * Ex. : d’ici décembre 2026
+     */
+    echeance?: string | null;
+  };
+  fonds_titre?: string | null;
+  fonds_sous_titre?: string | null;
+  /**
+   * Laisser vide pour garder la photo actuelle (extraite du dépliant PDF).
+   */
+  fonds_photo?: (number | null) | Media;
+  fonds_photo_defaut?: string | null;
+  /**
+   * Laisser une ligne vide entre deux paragraphes.
+   */
+  fonds_texte?: string | null;
+  pastilles?:
+    | {
+        titre: string;
+        texte?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  arguments?:
+    | {
+        texte: string;
+        id?: string | null;
+      }[]
+    | null;
+  participer_titre?: string | null;
+  participer_intro?: string | null;
+  participer_details?: string | null;
+  don_libelle?: string | null;
+  don_url?: string | null;
+  refuge_titre?: string | null;
+  refuge_verbes?:
+    | {
+        texte: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Laisser une ligne vide entre deux paragraphes.
+   */
+  asso_texte?: string | null;
+  asso_lien_libelle?: string | null;
+  asso_lien_url?: string | null;
+  chiffres_annee?: string | null;
+  chiffres?:
+    | {
+        valeur: string;
+        libelle: string;
+        icone?: ('maison' | 'lit' | 'femme' | 'homme' | 'repas') | null;
+        id?: string | null;
+      }[]
+    | null;
+  problematiques_titre?: string | null;
+  problematiques_note?: string | null;
+  problematiques?:
+    | {
+        pourcentage: number;
+        libelle: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Affichés en damier : photo, citation, photo, citation…
+   */
+  temoignages?:
+    | {
+        citation: string;
+        /**
+         * Laisser vide pour garder la photo actuelle (extraite du dépliant PDF).
+         */
+        photo?: (number | null) | Media;
+        photo_defaut?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  pied_nom?: string | null;
+  pied_adresse?: string | null;
+  pied_telephone?: string | null;
+  pied_email?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "historique".
  */
 export interface Historique {
@@ -609,6 +728,92 @@ export interface BenevolatPage {
   note_manuscrite?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fonds-dotation_select".
+ */
+export interface FondsDotationSelect<T extends boolean = true> {
+  photo_couverture?: T;
+  photo_couverture_defaut?: T;
+  titre?: T;
+  projet_titre?: T;
+  projet_texte?: T;
+  collecte?:
+    | T
+    | {
+        titre?: T;
+        recolte?: T;
+        objectif_libelle?: T;
+        objectif?: T;
+        echeance?: T;
+      };
+  fonds_titre?: T;
+  fonds_sous_titre?: T;
+  fonds_photo?: T;
+  fonds_photo_defaut?: T;
+  fonds_texte?: T;
+  pastilles?:
+    | T
+    | {
+        titre?: T;
+        texte?: T;
+        id?: T;
+      };
+  arguments?:
+    | T
+    | {
+        texte?: T;
+        id?: T;
+      };
+  participer_titre?: T;
+  participer_intro?: T;
+  participer_details?: T;
+  don_libelle?: T;
+  don_url?: T;
+  refuge_titre?: T;
+  refuge_verbes?:
+    | T
+    | {
+        texte?: T;
+        id?: T;
+      };
+  asso_texte?: T;
+  asso_lien_libelle?: T;
+  asso_lien_url?: T;
+  chiffres_annee?: T;
+  chiffres?:
+    | T
+    | {
+        valeur?: T;
+        libelle?: T;
+        icone?: T;
+        id?: T;
+      };
+  problematiques_titre?: T;
+  problematiques_note?: T;
+  problematiques?:
+    | T
+    | {
+        pourcentage?: T;
+        libelle?: T;
+        id?: T;
+      };
+  temoignages?:
+    | T
+    | {
+        citation?: T;
+        photo?: T;
+        photo_defaut?: T;
+        id?: T;
+      };
+  pied_nom?: T;
+  pied_adresse?: T;
+  pied_telephone?: T;
+  pied_email?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
