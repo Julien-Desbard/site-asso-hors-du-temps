@@ -37,6 +37,7 @@ import {
   ARTICLES_SECOURS,
   BENEVOLAT_PAGE_SECOURS,
   ETAPES_ACCUEIL_SECOURS,
+  FONDS_DOTATION_SECOURS,
   FRISE_HISTORIQUE_SECOURS,
   HISTORIQUE_SECOURS,
   MEMBRES_EQUIPE_SECOURS,
@@ -79,6 +80,7 @@ describe('lib/payload — base injoignable', () => {
     ['getArticlesPresse', () => lib.getArticlesPresse(), ARTICLES_PRESSE_SECOURS],
     ['getRapportsActivite', () => lib.getRapportsActivite(), RAPPORTS_ACTIVITE_SECOURS],
     ['getDimanches', () => lib.getDimanches(), null],
+    ['getFondsDotation', () => lib.getFondsDotation(), FONDS_DOTATION_SECOURS],
   ])('%s ne jette pas et sert le contenu de secours', async (_nom, appel, attendu) => {
     faux.getPayloadMock.mockRejectedValue(PANNE);
 
@@ -138,6 +140,7 @@ describe('lib/payload — base disponible', () => {
     ['getDimanches', () => lib.getDimanches()],
     ['getAccueilPage', () => lib.getAccueilPage()],
     ['getBenevolatPage', () => lib.getBenevolatPage()],
+    ['getFondsDotation', () => lib.getFondsDotation()],
   ])('%s renvoie le global de la base sans rien journaliser', async (_nom, appel) => {
     baseDisponible(DOCS, GLOBAL);
 

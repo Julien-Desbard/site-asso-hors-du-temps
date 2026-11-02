@@ -1,12 +1,16 @@
 import type { GlobalConfig } from 'payload';
 import { revalidateGlobalChange } from '../hooks/revalidate.ts';
+import { estAdmin, masquerHorsAdmin } from '../lib/acces.ts';
 
 export const AccueilPage: GlobalConfig = {
   slug: 'accueil-page',
   label: 'Page Être accueilli',
+  admin: {
+    hidden: masquerHorsAdmin,
+  },
   access: {
     read: () => true,
-    update: ({ req: { user } }) => Boolean(user),
+    update: estAdmin,
   },
   hooks: {
     afterChange: [revalidateGlobalChange('accueil-page')],

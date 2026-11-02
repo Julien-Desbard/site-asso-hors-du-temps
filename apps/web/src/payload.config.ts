@@ -18,13 +18,14 @@ import { Parametre } from './globals/Parametre.ts';
 import { AccueilPage } from './globals/AccueilPage.ts';
 import { Dimanche } from './globals/Dimanche.ts';
 import { BenevolatPage } from './globals/BenevolatPage.ts';
+import { FondsDotation } from './globals/FondsDotation.ts';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
   collections: [Users, Media, Articles, MembreEquipe, EtapeAccueil, FriseHistorique, ArticlePresse, RapportActivite],
-  globals: [Historique, Parametre, AccueilPage, Dimanche, BenevolatPage],
+  globals: [FondsDotation, Historique, Parametre, AccueilPage, Dimanche, BenevolatPage],
   editor: lexicalEditor(),
   i18n: {
     supportedLanguages: { fr },

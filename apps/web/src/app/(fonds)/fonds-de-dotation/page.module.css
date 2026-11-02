@@ -1,0 +1,558 @@
+/* Page Fonds de dotation — reprise web (responsive) du dépliant PDF 4 pages. */
+
+.conteneur {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.texte {
+  display: grid;
+  gap: 14px;
+  font-size: 17px;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* ---------- Logo ---------- */
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+  color: var(--fdd-encre);
+  text-align: center;
+  line-height: 1.1;
+}
+.logoToit { width: 100%; height: auto; margin-bottom: 6px; }
+.logoNom { font-size: 34px; text-transform: uppercase; letter-spacing: 0.02em; }
+.logoSousNom { font-size: 21px; text-transform: uppercase; margin-top: 4px; }
+.logoFonds {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #bbb;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.logoCompact { width: 120px; }
+.logoCompact .logoNom { font-size: 15px; }
+.logoCompact .logoSousNom { font-size: 10px; }
+.logoCompact .logoFonds { font-size: 7px; margin-top: 4px; padding-top: 4px; }
+
+/* ---------- Page 1 : couverture ---------- */
+.couverture { background: #fff; }
+
+.couverturePhoto {
+  position: relative;
+  height: clamp(240px, 48vw, 560px);
+  /* Bas arrondi, comme la photo « en cuvette » du dépliant. */
+  clip-path: ellipse(90% 100% at 55% 0%);
+}
+
+.couvertureTitre {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.grandTitre {
+  font-family: var(--fdd-main);
+  font-weight: 400;
+  font-size: clamp(44px, 7.5vw, 92px);
+  line-height: 1.02;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fdd-brique);
+}
+
+.projet {
+  background: var(--fdd-greige);
+  /* Vague de transition blanc → greige. */
+  border-radius: 50% 50% 0 0 / 70px 70px 0 0;
+  padding: 72px 0 64px;
+}
+
+.projetGrille {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.etiquette {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--fdd-brun);
+  color: #fff;
+  font-family: var(--fdd-texte);
+  font-weight: 700;
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  margin-bottom: 16px;
+}
+
+.projetTitre {
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.collecte {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: center;
+  border: 3px solid var(--fdd-brun);
+  border-radius: 40px;
+  padding: 44px 28px 32px;
+  margin-top: 24px;
+}
+
+.collecteEtiquette {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  margin: 0;
+  font-size: 17px;
+}
+
+/* Thermomètre : tube + bulbe, niveau = --remplissage (calculé côté serveur). */
+.thermometre {
+  position: relative;
+  width: 70px;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.thermometreTube {
+  position: relative;
+  width: 30px;
+  flex: 1;
+  border: 4px solid #d9d4cf;
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  background: #fff;
+  overflow: hidden;
+}
+.thermometreNiveau {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--remplissage);
+  background: var(--fdd-ambre);
+}
+.thermometreBulbe {
+  width: 64px;
+  height: 64px;
+  margin-top: -6px;
+  border-radius: 50%;
+  border: 4px solid #d9d4cf;
+  background: var(--fdd-ambre);
+}
+/* Graduations : rouges en haut à droite, bleues en bas à gauche. */
+.thermometre::before,
+.thermometre::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  background: repeating-linear-gradient(to bottom, currentColor 0 2px, transparent 2px 10px);
+}
+.thermometre::before { right: 0; top: 18px; height: 90px; color: #d0485a; }
+.thermometre::after { left: 0; top: 120px; height: 80px; color: #4a9fd0; }
+
+.collecteChiffres { text-align: center; }
+.collecteLibelle {
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--fdd-brique);
+}
+.collecteMontant {
+  font-weight: 700;
+  font-size: clamp(36px, 5vw, 52px);
+  line-height: 1.1;
+  color: var(--fdd-brique);
+  margin-bottom: 18px;
+}
+.collecteObjectifLibelle {
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 19px;
+  text-transform: uppercase;
+  color: var(--fdd-brun);
+  text-align: left;
+}
+.collecteObjectif,
+.collecteEcheance {
+  font-family: var(--fdd-main);
+  text-transform: uppercase;
+  text-align: left;
+}
+.collecteObjectif { font-size: 30px; line-height: 1.2; margin-top: 4px; }
+.collecteEcheance { font-size: 24px; }
+
+/* ---------- Page 2 : le fonds ---------- */
+.fonds { padding: 80px 0; background: #fff; }
+
+.fondsEnTete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px 48px;
+  margin-bottom: 32px;
+}
+
+.titreFeutre {
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.fondsSousTitre {
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 26px;
+  text-transform: uppercase;
+}
+
+.fondsGrille {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.fondsPhoto {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+
+.atouts {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-top: 56px;
+}
+
+.pastilles {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* Goutte « épingle » : cercle + pointe en bas, dégradé orange → brun. */
+.pastille {
+  position: relative;
+  aspect-ratio: 1 / 1.25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 18% 10% 0;
+  border-radius: 50% 50% 50% 50% / 42% 42% 58% 58%;
+  clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+  background: linear-gradient(180deg, #f6a623, #c5541a);
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.15;
+}
+.pastille:nth-child(2) { background: linear-gradient(180deg, #b45a1e, #6b2a10); }
+.pastille:nth-child(3) { background: linear-gradient(180deg, #9a3c16, #4a1a08); }
+.pastille strong { display: block; font-size: 16px; color: #ffd27a; margin-bottom: 6px; }
+.pastille:first-child strong { color: #3a1606; }
+
+.arguments {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+.arguments li {
+  position: relative;
+  padding-left: 38px;
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+.arguments li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 24px;
+  height: 30px;
+  background: var(--fdd-orange);
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%);
+}
+
+.participer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-top: 64px;
+}
+.participerTexte { display: grid; gap: 18px; justify-items: start; font-size: 19px; font-weight: 700; }
+.email { color: #1f5a8a; }
+
+.boutonDon {
+  display: inline-block;
+  background: var(--fdd-brique);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 12px 26px;
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+.boutonDon:hover,
+.boutonDon:focus-visible { background: #7e1f14; }
+
+/* ---------- Page 3 : l'association ---------- */
+.asso { padding: 80px 0; background: #fff5ef; }
+
+.assoGrille {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.refugeTitre {
+  display: inline-block;
+  background: var(--fdd-vert);
+  color: #fff;
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 44px);
+  text-transform: uppercase;
+  padding: 6px 22px;
+  transform: rotate(-6deg);
+  margin-bottom: 24px;
+}
+.refugeVerbes {
+  list-style: none;
+  padding: 0;
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--fdd-vert);
+}
+
+.lienFort { font-weight: 700; }
+
+.chiffres {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 64px;
+}
+.chiffresAnnee {
+  width: 1ch;
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 0.95;
+  color: #c4512a;
+  word-break: break-all;
+}
+.chiffresListe {
+  list-style: none;
+  padding: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.chiffresListe li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+  color: #9b1c1c;
+  border-left: 3px dotted #f2c14e;
+}
+.chiffresListe li:first-child { border-left: 0; }
+.chiffresListe strong { font-size: 24px; line-height: 1.1; margin-top: 8px; }
+.chiffresListe span { font-weight: 800; font-size: 14px; text-transform: uppercase; line-height: 1.2; }
+
+.problematiques {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-top: 64px;
+}
+.barres {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: auto 240px auto;
+}
+/* Chaque barre : % / piste / libellé, en sous-grille des 3 lignes de la liste : les
+   pistes partagent la même ligne de base quelle que soit la longueur des libellés. */
+.barre {
+  grid-row: span 3;
+  display: grid;
+  grid-template-rows: subgrid;
+  text-align: center;
+}
+.barrePourcent { align-self: end; font-weight: 800; font-size: 22px; }
+.barrePiste {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 7px;
+  border-bottom: 6px solid var(--fdd-orange);
+}
+.barreValeur { width: 100%; background: var(--fdd-vert); }
+.barreLibelle {
+  padding: 8px 4px 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.2;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+.problematiquesLegende { text-align: center; color: var(--fdd-vert); font-weight: 700; }
+.titreVert {
+  font-family: var(--fdd-feutre);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* ---------- Page 4 : témoignages en damier ---------- */
+.temoignages { padding: 80px 0; background: #fff; }
+
+.damier {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+  /* Les interstices laissent voir des hachures rouges, comme les cadres du dépliant. */
+  background: repeating-linear-gradient(90deg, #9b1c1c 0 2px, transparent 2px 6px);
+}
+.damier > li { aspect-ratio: 1 / 1; background: #fff; }
+.damierPhoto { position: relative; overflow: hidden; }
+.damierCitation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.damierCitation blockquote {
+  margin: 0;
+  font-family: var(--fdd-main);
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ---------- Bandeau du bas (page 2 du dépliant) ---------- */
+.pied { background: var(--fdd-vert); color: #fff; }
+.piedGrille {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 40px;
+  align-items: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.piedLogo { background: #fff; padding: 14px 18px; }
+.piedNom {
+  font-weight: 700;
+  font-size: 19px;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 260px;
+  justify-self: center;
+}
+.piedContact {
+  display: grid;
+  gap: 2px;
+  font-style: normal;
+  font-size: 18px;
+  padding-left: 20px;
+  border-left: 3px solid #fff;
+}
+.piedContact a { color: #fff; text-decoration: none; }
+.piedContact a:hover,
+.piedContact a:focus-visible { text-decoration: underline; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .projetGrille,
+  .fondsGrille,
+  .atouts,
+  .assoGrille,
+  .problematiques,
+  .participer { grid-template-columns: 1fr; }
+  .chiffresListe { grid-template-columns: repeat(3, 1fr); row-gap: 24px; }
+  .chiffresListe li:nth-child(4) { border-left: 0; }
+  .piedGrille { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 16px; }
+  .piedContact { border-left: 0; padding-left: 0; }
+}
+
+@media (max-width: 700px) {
+  .couvertureTitre { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 20px; }
+  .logo { width: 200px; }
+  .logoNom { font-size: 26px; }
+  .logoSousNom { font-size: 16px; }
+  .logoFonds { font-size: 12px; }
+  .collecte { grid-template-columns: 1fr; justify-items: center; padding: 44px 18px 28px; }
+  .collecteEtiquette { white-space: normal; text-align: center; width: max-content; max-width: 90%; }
+  .collecteObjectifLibelle,
+  .collecteObjectif,
+  .collecteEcheance { text-align: center; }
+  .pastilles { grid-template-columns: 1fr; max-width: 240px; margin: 0 auto; }
+  .chiffres { flex-direction: column; }
+  .chiffresAnnee { width: auto; word-break: normal; }
+  .chiffresListe { grid-template-columns: repeat(2, 1fr); }
+  .chiffresListe li { border-left: 0; }
+  .barres { grid-template-rows: auto 180px auto; }
+  .fondsSousTitre { font-size: 20px; }
+  .barrePiste { padding: 0 4px; }
+  .barreLibelle { font-size: 11px; }
+  /* Une colonne : la suite photo, citation, photo… alterne naturellement. */
+  .damier { grid-template-columns: 1fr; }
+  .damierCitation { aspect-ratio: auto !important; padding: 32px 20px; }
+}

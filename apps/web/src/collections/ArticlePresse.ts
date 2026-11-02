@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { revalidateCollectionChange, revalidateCollectionDelete } from '../hooks/revalidate.ts';
+import { estAdmin, masquerHorsAdmin } from '../lib/acces.ts';
 
 export const ArticlePresse: CollectionConfig = {
   slug: 'article-presse',
@@ -8,13 +9,17 @@ export const ArticlePresse: CollectionConfig = {
     plural: 'Articles de presse',
   },
   admin: {
+    hidden: masquerHorsAdmin,
     useAsTitle: 'titre',
+    defaultColumns: ['titre', 'source', 'date'],
   },
+  // Ordre d'affichage sur le site : du plus récent au plus ancien.
+  defaultSort: '-date',
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: estAdmin,
+    update: estAdmin,
+    delete: estAdmin,
   },
   versions: {
     drafts: true,
@@ -36,22 +41,23 @@ export const ArticlePresse: CollectionConfig = {
       required: true,
     },
     {
-      name: 'annee',
-      type: 'text',
-      label: 'Année',
+      name: 'date',
+      type: 'date',
+      label: 'Date de parution',
       required: true,
+      admin: {
+        date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy' },
+        description: 'Sert à classer les articles, du plus récent au plus ancien. Le site affiche le mois et l’année.',
+      },
     },
     {
       name: 'lien',
       type: 'text',
       label: 'Lien externe',
       required: true,
-    },
-    {
-      name: 'ordre',
-      type: 'number',
-      defaultValue: 0,
-      min: 0,
+      admin: {
+        description: 'Un lien YouTube (youtu.be/… ou youtube.com/watch?v=…) affiche la vidéo directement sur le site.',
+      },
     },
   ],
 };

@@ -1,13 +1,14 @@
 import { getPayload } from 'payload';
 import { unstable_cache } from 'next/cache';
 import config from '../payload.config.ts';
-import type { AccueilPage, Article, ArticlePresse, BenevolatPage, Dimanche, EtapeAccueil, FriseHistorique, Historique, MembreEquipe, Parametre, RapportActivite } from '../payload-types.ts';
+import type { AccueilPage, Article, ArticlePresse, BenevolatPage, Dimanche, EtapeAccueil, FondsDotation, FriseHistorique, Historique, MembreEquipe, Parametre, RapportActivite } from '../payload-types.ts';
 import {
   ACCUEIL_PAGE_SECOURS,
   ARTICLES_PRESSE_SECOURS,
   ARTICLES_SECOURS,
   BENEVOLAT_PAGE_SECOURS,
   ETAPES_ACCUEIL_SECOURS,
+  FONDS_DOTATION_SECOURS,
   FRISE_HISTORIQUE_SECOURS,
   HISTORIQUE_SECOURS,
   MEMBRES_EQUIPE_SECOURS,
@@ -214,7 +215,7 @@ export async function getArticlesPresse(): Promise<ArticlePresse[]> {
         collection: 'article-presse',
         depth: 1,
         draft: false,
-        sort: 'ordre',
+        sort: ['-date', '-createdAt'],
         limit: 50,
       });
       return docs;
@@ -244,4 +245,17 @@ export async function getRapportsActivite(): Promise<RapportActivite[]> {
   );
 
   return avecSecours('getRapportsActivite', lecture, RAPPORTS_ACTIVITE_SECOURS);
+}
+
+export async function getFondsDotation(): Promise<FondsDotation> {
+  const lecture = unstable_cache(
+    async () => {
+      const payload = await getPayload({ config });
+      return payload.findGlobal({ slug: 'fonds-dotation', depth: 1 });
+    },
+    ['fonds-dotation'],
+    { tags: ['fonds-dotation'] },
+  );
+
+  return avecSecours('getFondsDotation', lecture, FONDS_DOTATION_SECOURS);
 }

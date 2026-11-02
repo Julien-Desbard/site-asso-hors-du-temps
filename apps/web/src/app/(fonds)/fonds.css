@@ -1,0 +1,31 @@
+/* Styles de base de la page Fonds de dotation (root layout autonome). */
+:root {
+  --fdd-brique: #a32a1c;
+  --fdd-brun: #7b3d1e;
+  --fdd-orange: #f39a1e;
+  --fdd-ambre: #f6b81a;
+  --fdd-greige: #ebe6e0;
+  --fdd-vert: #24524e;
+  --fdd-encre: #1d1a17;
+
+  --fdd-feutre: var(--nf-kalam), 'Comic Sans MS', cursive;
+  --fdd-main: var(--nf-patrick-hand), cursive;
+  --fdd-texte: var(--nf-nunito), system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--fdd-texte);
+  color: var(--fdd-encre);
+  background: #fff;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ul { margin: 0; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }

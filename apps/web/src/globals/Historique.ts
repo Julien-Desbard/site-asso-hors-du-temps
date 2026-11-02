@@ -1,11 +1,15 @@
 import type { GlobalConfig } from 'payload';
 import { revalidateGlobalChange } from '../hooks/revalidate.ts';
+import { estAdmin, masquerHorsAdmin } from '../lib/acces.ts';
 
 export const Historique: GlobalConfig = {
   slug: 'historique',
+  admin: {
+    hidden: masquerHorsAdmin,
+  },
   access: {
     read: () => true,
-    update: ({ req: { user } }) => Boolean(user),
+    update: estAdmin,
   },
   versions: {
     drafts: true,
